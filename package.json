@@ -1,0 +1,21 @@
+{
+    "name": "MTrack",
+    "description": "This project is the Backend API for my mobile tracking library",
+    "version": "0.0.1",
+    "main": "./MTrack.js",
+    "author": {
+        "name": "Massimiliano Fanciulli",
+        "email": "fanciulli@gmail.com"
+    },
+    "keywords": [],
+    "licenses": {
+        "type": "none"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git://github.com/YOUR_LOGIN/MTrack.git"
+    },
+    "bugs": {
+        "url": "http://github.com/YOUR_LOGIN/MTrack/issues"
+    }
+}
