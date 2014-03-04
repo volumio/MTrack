@@ -5,7 +5,7 @@
  */
 var auth_token="0GqtOtD4SSrJ1MUXj0ffkXLTt0a9ujYCZF6hMLtqfX7W0LA2SVQ3jPouAwgGnSa0";
 var api_log=require('../misc/logging.js');
-var api_http_utils=require('./http_utils.js');
+var api_http_utils=require('../misc/http_utils.js');
 
 function passes_auth(req) {
     var header=api_http_utils.get_header(req,"authorization");

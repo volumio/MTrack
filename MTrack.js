@@ -11,7 +11,7 @@ var api_errors=require('./api/1/errors.js');
 var aws=require('aws-sdk');
 
 var apis=http.createServer(function(req, res) {
-    aws.config.loadFromPath('./api/1/aws-credentials.json');
+    aws.config.loadFromPath('./aws-credentials.json');
     //Checking that request is for /api/<version>
     var pathname = url.parse(req.url).pathname;    
     if(_s.startsWith(pathname,"/api/1"))
