@@ -7,8 +7,12 @@ var http = require('http');
 var url= require("url");
 var _s = require('underscore.string');
 var api_log=require('./api/1/log.js');
+var api_logging=require('./api/misc/logging.js');
+var api_hbeat=require('./api/1/hbeat.js');
 var api_errors=require('./api/1/errors.js');
 var aws=require('aws-sdk');
+
+api_logging.log("API running");
 
 var apis=http.createServer(function(req, res) {
     aws.config.loadFromPath('./aws-credentials.json');
@@ -20,6 +24,8 @@ var apis=http.createServer(function(req, res) {
         {
             if(_s.startsWith(pathname,"/api/1/log"))
                 api_log.log(req,res);
+            else if(_s.startsWith(pathname,"/api/1/hbeat"))
+                api_hbeat.hbeat(req,res);
             else api_errors.no_one_here(res);
         }
         else 

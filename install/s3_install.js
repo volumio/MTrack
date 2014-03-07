@@ -5,7 +5,7 @@
  */
 var api_log=require('../api/misc/logging.js');
 var async=require('async');
-var install_buckets=require('./install_buckets.js');
+var install_buckets=require('../api/misc/s3_utils.js');
 
 //Creating users bucket
 async.series([
@@ -24,6 +24,10 @@ async.series([
     function(callback)
     {
         install_buckets.create_bucket('mtrack-feedbacks',callback);
+    },
+    function(callback)
+    {
+        install_buckets.create_bucket('mtrack-hbeat',callback);
     },
     function(callback)
     {
