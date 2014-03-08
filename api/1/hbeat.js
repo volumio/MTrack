@@ -12,7 +12,7 @@ var api_log=require('../misc/logging.js');
 var async=require('async');
 var datetime=require('../misc/datetime.js');
 
-function hbeat(req,res) {
+function store_today(req,res) {
     var user_name=api_auth.passes_auth(req);
     var pathname = url.parse(req.url).pathname;
     
@@ -27,7 +27,7 @@ function hbeat(req,res) {
             
             var app_id=pathname.substring(pathname.lastIndexOf("/")+1);
                     
-            cloud_data.read_hbeat(app_id, function(beat){
+            cloud_data.read_hbeat_today(app_id, function(beat){
                 
                 var data_to_upload;
                 
@@ -41,7 +41,7 @@ function hbeat(req,res) {
                 
                 data_to_upload.beat_count=data_to_upload.beat_count+1;
                 
-                cloud_data.store_hbeat(app_id,data_to_upload,function(err)
+                cloud_data.store_hbeat_today(app_id,data_to_upload,function(err)
                 {
                     if(err==null)
                         res.end();
@@ -57,5 +57,39 @@ function hbeat(req,res) {
     }
 }
 
-module.exports.hbeat=hbeat;
+function get_today(req,res)
+{
+    var user_name=api_auth.passes_auth(req);
+    var pathname = url.parse(req.url).pathname;
+    
+    if(user_name!=null)
+    {
+        var path=_s.words(pathname,"/");
+        var app_id=path[3];
+        
+        cloud_data.read_hbeat_today(app_id, function(beat){
+                
+                var data_to_upload;
+                
+                if(beat==null)
+                {
+                    data_to_upload={'beat_count':0,'day':'0'};
+                    data_to_upload["day"]=datetime.getDayAsStr();
+                    
+                }
+                else data_to_upload=beat;
+                
+                res.end(JSON.stringify(data_to_upload));
+            });
+        
+    }
+    else
+    {
+        api_errors.no_auth(res);
+    }
+}
+
+
+module.exports.store_today=store_today;
+module.exports.get_today=get_today;
 

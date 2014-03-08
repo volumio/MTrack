@@ -9,7 +9,6 @@ function get_header(req,key) {
     for(var item in req.headers) {
         if(item==key)
         {
-            api_log.log(item + ": " + req.headers[item]);
             return req.headers[item];
         }
       }

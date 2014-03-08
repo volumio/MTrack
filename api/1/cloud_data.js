@@ -40,7 +40,7 @@ function hbeat(jsonStr)
     this.day=datetime.getDayAsStr();
 }
 
-function store_hbeat(app_id,hbeat,callback)
+function store_hbeat_today(app_id,hbeat,callback)
 {
     var s3 = new aws.S3();
 
@@ -57,7 +57,7 @@ function store_hbeat(app_id,hbeat,callback)
     
 }
 
-function read_hbeat(app_id,callback)
+function read_hbeat_today(app_id,callback)
 {
     var s3 = new aws.S3();
 
@@ -76,5 +76,5 @@ function read_hbeat(app_id,callback)
 
 
 module.exports.read_user = read_user;
-module.exports.read_hbeat = read_hbeat;
-module.exports.store_hbeat = store_hbeat;
+module.exports.read_hbeat_today = read_hbeat_today;
+module.exports.store_hbeat_today = store_hbeat_today;

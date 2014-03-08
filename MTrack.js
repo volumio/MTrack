@@ -25,7 +25,13 @@ var apis=http.createServer(function(req, res) {
             if(_s.startsWith(pathname,"/api/1/log"))
                 api_log.log(req,res);
             else if(_s.startsWith(pathname,"/api/1/hbeat"))
-                api_hbeat.hbeat(req,res);
+                api_hbeat.store_today(req,res);
+            else api_errors.no_one_here(res);
+        }
+        else if(req.method=='GET')
+        {
+            if(_s.startsWith(pathname,"/api/1/hbeat") && _s.endsWith(pathname,"/today"))
+                api_hbeat.get_today(req,res);
             else api_errors.no_one_here(res);
         }
         else 
@@ -41,7 +47,4 @@ var apis=http.createServer(function(req, res) {
     {
         api_errors.no_one_here(res);
     }
-    
-    
-    
 }).listen(9080, "");
