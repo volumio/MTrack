@@ -3,10 +3,12 @@
  If you received it from a thrid party,
  please contact fanciulli@gmail.com
  */
+var datetime=require('date-utils');
+
 function getDayAsStr()
 {
-    var today=new Date();
-    return today.getDay()+"-"+today.getMonth()+"-"+today.getYear();
+    var today=Date.today();
+    return today.toFormat("DD-MM-YYYY");
 }
 
 module.exports.getDayAsStr=getDayAsStr;
