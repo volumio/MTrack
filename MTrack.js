@@ -11,11 +11,14 @@ var api_logging=require('./api/misc/logging.js');
 var api_hbeat=require('./api/1/hbeat.js');
 var api_errors=require('./api/1/errors.js');
 var aws=require('aws-sdk');
+aws.config.loadFromPath('./aws-credentials.json');
 
 api_logging.log("API running");
 
+var httpProxy = require('http-proxy');
+var proxy = httpProxy.createProxyServer();
+
 var apis=http.createServer(function(req, res) {
-    aws.config.loadFromPath('./aws-credentials.json');
     //Checking that request is for /api/<version>
     var pathname = url.parse(req.url).pathname;    
     if(_s.startsWith(pathname,"/api/1"))
@@ -42,6 +45,10 @@ var apis=http.createServer(function(req, res) {
         res.writeHead(200, {
         'Content-Type': 'text/plain; charset=UTF-8'
         });
+    }
+    else if(_s.startsWith(pathname,"/ui"))
+    {
+        proxy.web(req, res, { target: 'http://localhost:8000' });
     }
     else
     {
