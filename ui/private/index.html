@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en" ng-app="mtrackApp">
+<head>
+  <meta charset="utf-8">
+  <title>MTrack</title>
+  <link rel="stylesheet" href="../css/app.css"/>
+  <link href="../css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+  
+<nav class="navbar navbar-default navbar-static-top navbar-inverse" role="navigation" ng-controller="HeaderCtrl">
+    <p class="navbar-text navbar-left"><a href="#/">MTrack</a></p>
+
+    
+     <div class="collapse navbar-collapse navbar-nav navbar-right" >
+       <ul class="nav navbar-nav navbar-right">
+        <li class="dropdown">
+          <a class="dropdown-toggle" data-toggle="dropdown" ng-click="select_app(null)">{{selected_app.name!=null?selected_app.name:"Pick one"}} <b class="caret"></b>   </a>
+          <ul class="dropdown-menu">
+            <li ng-repeat="app in apps"  ><a href="#/app_details/{{app.id}}" ng-click="select_app(app)">{{app.name}}</a></li>
+
+          </ul>
+        </li>
+      </ul>
+         
+       
+        
+    </div>        
+</nav>
+  
+<div ng-view class="div_page"></div>
+    
+    
+  <script src="../lib/angular/angular.js"></script>
+  <script src="../lib/angular/angular-route.js"></script>
+  <script src="../js/app.js"></script>
+  <script src="../js/services.js"></script>
+  <script src="../js/controllers.js"></script>
+  <script src="../js/app-controller.js"></script>
+  <script src="../js/filters.js"></script>
+  <script src="../js/directives.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+  <script src="../js/bootstrap.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en" ng-app="mtrackApp">
+<head>
+  <meta charset="utf-8">
+  <title>MTrack</title>
+  <link rel="stylesheet" href="../css/app.css"/>
+  <link href="../css/bootstrap.min.css" rel="stylesheet">
+  
+</head>
+<body>
+    <div class="jumbotron div_page" align="center">
+  <h1>Create an account</h1>
+  <h2>Please fill the form below. We will review you submission and activate your account</h2>
+  
+  <form action="/register" method="post">
+    <div>
+        <label>Email:</label>
+        <input type="text" name="username"/>
+    </div>
+    <div>
+        <label>Password:</label>
+        <input type="password" name="password"/>
+    </div>
+    <div>
+        <label>Full name:</label>
+        <input type="text" name="full_name"/>
+    </div>
+    <div>
+        <label>Society:</label>
+        <input type="password" name="society"/>
+    </div>
+      <div>
+        <input class="btn btn-default dropdown-toggle" type="submit" value="Submit"/>
+    </div>
+</form>
+  
+</div>
+
+    
+
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+  <script src="js/bootstrap.min.js"></script>
+</body>
