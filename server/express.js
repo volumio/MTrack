@@ -15,7 +15,8 @@ var setup_express = function(app, passport)
     app.post('/api/1/hbeat/:appId', api_hbeat.store_today);
     app.post('/login', passport.authenticate('local', {successRedirect: '/admin/private/index.html', failureRedirect: '/admin/login.html'}));
     app.post('/register', registration.process_registration);
-
+    app.get('/activate/:userId',registration.activate_user);
+    
     app.use('/admin/private/*', passport.authenticate('local'), express.static(__dirname + '/../ui/private'));
     app.use('/admin', express.static(__dirname + '/../ui'));
     app.use(function(err, req, res, next) {

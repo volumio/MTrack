@@ -13,7 +13,7 @@ var ses=new aws.SES();
 function sendEmail(user,content,subject,callback) {
     var params={Destination: 
                 {ToAddresses:[config.get_admin_email()]},
-                Message:{Body:{Text:{Data:content}},Subject:{Data:subject}},
+                Message:{Body:{Html:{Data:content}},Subject:{Data:subject}},
                     Source:config.get_admin_email()};
     
     ses.sendEmail(params,function(err,data){})

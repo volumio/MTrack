@@ -23,6 +23,13 @@ function read_user(username, callback)
     });//.send();
 }
 
+function store_user(username, user,callback)
+{
+    s3_utils.put_json_on_bucket('mtrack-users',username,user,callback);
+}
+
+
+
 function store_hbeat_today(app_id,hbeat,callback)
 {
     var s3 = new aws.S3();
@@ -55,7 +62,20 @@ function store_user_on_waiting_list(UUID,user,callback)
     s3_utils.put_json_on_bucket('mtrack-users-waiting-list',UUID,user,callback);
 }
 
+function delete_user_from_waiting_list(id,callback)
+{
+    s3_utils.delete_from_bucket('mtrack-users-waiting-list',id,callback);
+}
+
+function read_user_from_waiting_list(id,callback)
+{
+    s3_utils.get_json_from_bucket('mtrack-users-waiting-list',id,callback);
+}
+
 module.exports.read_user = read_user;
+module.exports.store_user=store_user;
 module.exports.read_hbeat_today = read_hbeat_today;
 module.exports.store_hbeat_today = store_hbeat_today;
 module.exports.store_user_on_waiting_list=store_user_on_waiting_list;
+module.exports.delete_user_from_waiting_list=delete_user_from_waiting_list;
+module.exports.read_user_from_waiting_list=read_user_from_waiting_list;

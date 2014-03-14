@@ -18,8 +18,13 @@ function sendAcceptanceEmailToAdmin(user,content,callback) {
     
 }
 
-function sendAccountActiveToUser(user,callback) {
-    
+function sendAccountActiveToUser(user,content,callback) {
+    ses_utils.sendEmail(user,content,'Your account is now active',function(err)
+    {
+        if(err!=null)
+            callback(err);
+        else callback(null,null);
+    });
 }
 // Functions which will be available to external callers
 module.exports.sendAcceptanceEmailToAdmin = sendAcceptanceEmailToAdmin;

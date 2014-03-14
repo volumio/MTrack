@@ -115,6 +115,20 @@ function get_json_from_bucket(bucket,key,callback)
     });
 }
 
+function delete_from_bucket(bucket, key, callback)
+{
+    var params = {Bucket: bucket, Key: key};
+
+    s3.deleteObject(params,function(err, data) {}).
+    on('success',function(response){
+        callback(null);
+    })
+    .on('error',function(err){
+        callback(err);
+    });
+
+}
+
 // Functions which will be available to external callers
 module.exports.create_bucket = create_bucket;
 module.exports.list_buckets = list_buckets;
@@ -122,3 +136,4 @@ module.exports.put_file_on_bucket = put_file_on_bucket;
 module.exports.put_data_on_bucket=put_data_on_bucket;
 module.exports.put_json_on_bucket=put_json_on_bucket;
 module.exports.get_json_from_bucket=get_json_from_bucket;
+module.exports.delete_from_bucket=delete_from_bucket;

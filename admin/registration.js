@@ -8,6 +8,7 @@ var async=require('async');
 var config=require('../server/backend_config.js');
 var email_service =config.get_email_service();
 var storage_service=config.get_data_storage();
+var fs=require('fs');
 
 function process_registration(req,res)
 {
@@ -21,12 +22,8 @@ function process_registration(req,res)
     function(callback)
     {
         var user=req.body;
-        var content="The following user registered: \n"+
-                "Username: "+user['username']+"\n"+
-                "Password: "+user['password']+"\n"+
-                "Full name: "+user['full_name']+"\n"+
-                "Society: "+user['society']+"\n\n"+
-                "To activate click on the following link: "+UUID;
+        var content=get_content(user,req,UUID);
+        api_log.log(content);
         email_service.sendAcceptanceEmailToAdmin(req.body['username'],content,callback);
     },
     function(callback)
@@ -43,4 +40,81 @@ function(err,data){
     
 }
 
+function get_content(user,req,UUID)
+{
+    var email=fs.readFileSync(__dirname+'/email_pre.html');
+    email+="<h1>Account activation request</h1>"+
+                "<p>The following user registered:</p>"+
+                "<p>Username: "+user['username']+"</p>"+
+                "<p>Password: "+user['password']+"</p>"+
+                "<p>Full name: "+user['full_name']+"</p>"+
+                "<p>Society: "+user['society']+"</p>"+
+                "<table><tr>To activate click on the button:</tr><tr>"+
+		"<td class=\"padding\"><p><a href=\"http://"+req.headers.host+"/activate/"+UUID+"\" class=\"btn-primary\">Activate user</a></p>"+
+		"</td><tr></table>";
+        
+    email+=fs.readFileSync(__dirname+'/email_post.html');
+    
+    return email;
+}
+
+function activate_user(req,res)
+{
+    var user;
+    var userId=req.params.userId;
+    
+    async.series([
+    function(callback)
+    {
+      storage_service.read_user_from_waiting_list(userId,function(data)
+      {
+          if(data!=null)
+          {
+              user=data;
+              callback(null);
+          }
+          else callback("NO_USER");
+      });
+    },
+    function(callback)
+    {
+        storage_service.store_user(user['username'],user,callback);
+    },
+    function(callback)
+    {
+        email_service.sendAccountActiveToUser(user['username'],get_account_active_content(req),callback);
+    },
+    function(callback)
+    {
+        api_log.log("Delete user from waiting list");
+      storage_service.delete_user_from_waiting_list(userId,callback);  
+    },
+    function(callback)
+    {
+        res.redirect('/admin/public/active.html');
+    }
+],
+function(err,data){
+    if(err!=null)
+    {
+        res.redirect('/admin/public/user_activation_error.html');  
+    }
+});
+}
+
+function get_account_active_content(req)
+{
+    var email=fs.readFileSync(__dirname+'/email_pre.html');
+    email+="<h1>Yay!</h1>"+
+                "<p>Your account is now active!</p>"+
+                "<table><tr>"+
+		"<td class=\"padding\"><p><a href=\"http://"+req.headers.host+"/admin/public/index.html"+"\" class=\"btn-primary\">Login</a></p>"+
+		"</td><tr></table>";
+        
+    email+=fs.readFileSync(__dirname+'/email_post.html');
+    
+    return email;
+}
+
 module.exports.process_registration=process_registration;
+module.exports.activate_user=activate_user;
