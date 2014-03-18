@@ -10,28 +10,27 @@ var api_errors = require('./errors.js');
 var api_log = require('../misc/logging.js');
 var async = require('async');
 var datetime = require('../misc/datetime.js');
-
+var data_model=require('../model/data_model.js');
 var data_storage = require('../../server/backend_config.js').get_data_storage();
 
 
 function store_today(req, res) {
-    if (req.params.appId !== undefined)
+    var app_id=req.params.appId;
+    if (app_id !== undefined)
     {
-        data_storage.read_hbeat_today(req.params.appId, function(beat) {
+        data_storage.read_hbeat_today(app_id, function(beat) {
 
             var data_to_upload;
-
+            console.log(beat);
             if (beat == null)
             {
-                data_to_upload = {'beat_count': 0, 'day': '0'};
-                data_to_upload["day"] = datetime.getDayAsStr();
-
+                data_to_upload = new data_model.hbeat(app_id);
             }
             else data_to_upload = beat;
 
             data_to_upload.beat_count = data_to_upload.beat_count + 1;
 
-            data_storage.store_hbeat_today(req.params.appId, data_to_upload, function(err)
+            data_storage.store_hbeat_today( data_to_upload, function(err)
             {
                 if (err == null)
                     res.end();

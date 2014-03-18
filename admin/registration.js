@@ -47,8 +47,8 @@ function get_content(user,req,UUID)
                 "<p>The following user registered:</p>"+
                 "<p>Username: "+user['username']+"</p>"+
                 "<p>Password: "+user['password']+"</p>"+
-                "<p>Full name: "+user['full_name']+"</p>"+
-                "<p>Society: "+user['society']+"</p>"+
+                "<p>Full name: "+user['fullname']+"</p>"+
+                "<p>Society: "+user['company']+"</p>"+
                 "<table><tr>To activate click on the button:</tr><tr>"+
 		"<td class=\"padding\"><p><a href=\"http://"+req.headers.host+"/activate/"+UUID+"\" class=\"btn-primary\">Activate user</a></p>"+
 		"</td><tr></table>";
@@ -70,7 +70,7 @@ function activate_user(req,res)
       {
           if(data!=null)
           {
-              user=data;
+              user=data.user;
               callback(null);
           }
           else callback("NO_USER");
@@ -78,20 +78,19 @@ function activate_user(req,res)
     },
     function(callback)
     {
-        storage_service.store_user(user['username'],user,callback);
+        storage_service.store_user(user,callback);
     },
     function(callback)
     {
-        email_service.sendAccountActiveToUser(user['username'],get_account_active_content(req),callback);
+        email_service.sendAccountActiveToUser(user.username,get_account_active_content(req),callback);
     },
     function(callback)
     {
-        api_log.log("Delete user from waiting list");
-      storage_service.delete_user_from_waiting_list(userId,callback);  
+        storage_service.delete_user_from_waiting_list(userId,callback);  
     },
     function(callback)
     {
-        res.redirect('/admin/public/active.html');
+        res.redirect('/admin/public/user_active.html');
     }
 ],
 function(err,data){

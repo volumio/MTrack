@@ -3,22 +3,28 @@
  If you received it from a thrid party,
  please contact fanciulli@gmail.com
  */
-
-function user(jsonStr)
+var datetime=require('../misc/datetime.js');
+function user(username)
 {
-    var json = JSON.parse(jsonStr);
-    this.name = json['name'];
-    this.password=json['password'];
-    this.apps = json['apps'];
-    
-    //api_log.log(this.apps.toString());
+    this.username = username;
+    this.password="";
+    this.fullname="";
+    this.company="";
 }
 
-function hbeat(json)
+function user_waiting_list(UUID,username)
 {
-    this.beat_count=json['beat_count'];
-    this.day=datetime.getDayAsStr();
+    this.UUID = UUID;
+    this.user=new user(username);
+}
+
+function hbeat(app_id)
+{
+    this.app_id=app_id;
+    this.beat_count=0;
+    this.day=datetime.getNowAsLong();
 }
 
 module.exports.hbeat=hbeat;
 module.exports.user=user;
+module.exports.user_waiting_list=user_waiting_list;

@@ -4,6 +4,7 @@
  please contact fanciulli@gmail.com
  */
 var datetime=require('date-utils');
+var moment=require('moment');
 
 function getDayAsStr()
 {
@@ -11,5 +12,20 @@ function getDayAsStr()
     return today.toFormat("DD-MM-YYYY");
 }
 
-module.exports.getDayAsStr=getDayAsStr;
+function getNow()
+{
+    var today=Date.today();
+    return today.toFormat("DD-MM-YYYY");
+}
 
+function getNowAsLong()
+{
+    var day=moment();
+    day.hour(0);
+    day.minute(0);
+    day.second(0);
+    day.millisecond(0);
+    return day.valueOf();
+}
+module.exports.getDayAsStr=getDayAsStr;
+module.exports.getNowAsLong=getNowAsLong;

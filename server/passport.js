@@ -5,6 +5,7 @@
  */
 var LocalStrategy = require('passport-local').Strategy;
 var api_log = require('../api/misc/logging.js');
+var data_model=require('../api/model/data_model.js');
 
 var setup_passport = function(passport)
 {
@@ -13,12 +14,10 @@ var setup_passport = function(passport)
     passport.use('local', new LocalStrategy(
             function(username, password, done) {
                  data_storage.read_user(username,function(user){
-                    // api_log.log(user);
-                     if(user!=null)
+                      if(user!=null)
                      {
                          if(password==user['password'])
                          {
-                             user.username=username;
                              done(null,user);
                          }
                          else done(null, false, {message: 'Incorrect password.'});
@@ -33,7 +32,7 @@ var setup_passport = function(passport)
     });
 
     passport.deserializeUser(function(username, done) {
-        var user={'username':username};
+        var user=new data_model.user(username);
         
         done(null, user);
     });

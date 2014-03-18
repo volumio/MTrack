@@ -6,6 +6,7 @@
 var express = require('express');
 
 var api_hbeat=require('../api/1/hbeat.js');
+var api_feedback=require('../api/1/feedback.js');
 var api_logging=require('../api/misc/logging.js');
 var registration=require('../admin/registration.js');
 
@@ -13,7 +14,9 @@ var setup_express = function(app, passport)
 {
     app.get('/api/1/hbeat/:appId/today', api_hbeat.get_today);
     app.post('/api/1/hbeat/:appId', api_hbeat.store_today);
-    app.post('/login', passport.authenticate('local', {successRedirect: '/admin/private/index.html', failureRedirect: '/admin/login.html'}));
+    app.post('/api/1/feedback/:appId', api_feedback.store_feedback);
+    
+    app.post('/login', passport.authenticate('local', {successRedirect: '/admin/private/index.html', failureRedirect: '/admin/public/login.html'}));
     app.post('/register', registration.process_registration);
     app.get('/activate/:userId',registration.activate_user);
     
