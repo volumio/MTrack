@@ -12,7 +12,7 @@ mtrackApp.config(['$routeProvider',
         controller: 'AppController'
       }).
       otherwise({
-        redirectTo: '../partials/app_details'
+        redirectTo: '../partials/no-app-selected.html'
       });
   }]);
 

@@ -64,15 +64,14 @@ function store_hbeat_today(hbeat,callback)
 function read_hbeat_today(app_id,callback)
 {
     var today=datetime.getNowAsLong();
-    var params = {Key: {appId: {S: app_id},day:{N:today.toString()}},
+	console.log(today);    
+var params = {Key: {appId: {S: app_id},day:{N:today.toString()}},
                     TableName: 'mtrack-hbeat',ConsistentRead: true };
 
 	dynamo.getItem(params, function(err, data) {
-            console.log(err);
-	  if (err || data == null || typeof data.Item == "undefined") callback(null);
+          if (err || data == null || typeof data.Item == "undefined") callback(null);
 	  else    
           {
-              console.log(data.Item);
               var hbeat=new data_model.hbeat(app_id);
               hbeat.beat_count=parseInt(data.Item.beat_count.N);
               hbeat.day=data.Item.day.N;
