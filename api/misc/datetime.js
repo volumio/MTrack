@@ -27,5 +27,12 @@ function getNowAsLong()
     day.millisecond(0);
     return day.valueOf();
 }
+
+function getTimestamp()
+{
+    var day=moment();
+    return day.valueOf();
+}
 module.exports.getDayAsStr=getDayAsStr;
 module.exports.getNowAsLong=getNowAsLong;
+module.exports.getTimestamp=getTimestamp;

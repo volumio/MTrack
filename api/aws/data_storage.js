@@ -128,18 +128,21 @@ function read_user_from_waiting_list(id,callback)
 	});
 }
 
-function store_feedback(app_id,feedback,callback)
+function store_feedback(app_id,body,callback)
 {
-    var file_name=app_id+"-"+datetime.getDayAsStr();
+    var timestamp=datetime.getTimestamp();
     
-    s3_utils.put_json_on_bucket('mtrack-feedbacks',file_name,feedback,function(err,data){
-        if(err==null)
-            callback(null); 
-        else 
-        {
-            callback("CANNOT_STORE_FEEDBACK");
-        }
-    });
+    var params = {Item: {id:{N:timestamp.toString()},
+                         app_id: {S: app_id},
+			    text:{S:body.text}},
+			  TableName: 'mtrack-feedbacks'};
+
+    console.log(params);
+	dynamo.putItem(params, function(err, data) {
+        console.log(err);
+	  if (err) callback("ERR_PUTTING_USER");
+	  else    callback(null);
+	});
     
 }
 module.exports.read_user = read_user;
@@ -149,4 +152,6 @@ module.exports.store_hbeat_today = store_hbeat_today;
 module.exports.store_user_on_waiting_list=store_user_on_waiting_list;
 module.exports.delete_user_from_waiting_list=delete_user_from_waiting_list;
 module.exports.read_user_from_waiting_list=read_user_from_waiting_list;
+
+
 module.exports.store_feedback=store_feedback;
