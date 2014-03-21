@@ -63,9 +63,9 @@ function store_hbeat_today(hbeat,callback)
 
 function read_hbeat_today(app_id,callback)
 {
-    var today=datetime.getNowAsLong();
-	console.log(today);    
-var params = {Key: {appId: {S: app_id},day:{N:today.toString()}},
+    var today=datetime.getTodayAsLong();
+	    
+    var params = {Key: {appId: {S: app_id},day:{N:today.toString()}},
                     TableName: 'mtrack-hbeat',ConsistentRead: true };
 
 	dynamo.getItem(params, function(err, data) {
@@ -76,6 +76,51 @@ var params = {Key: {appId: {S: app_id},day:{N:today.toString()}},
               hbeat.beat_count=parseInt(data.Item.beat_count.N);
               hbeat.day=data.Item.day.N;
               callback(hbeat);
+          }
+	});
+    
+}
+
+function read_hbeat_month(app_id,callback)
+{
+    var stop=datetime.getNowAsLong();
+    var start=datetime.getOneMonthAgoAsLong();
+    
+    var params = {TableName: 'mtrack-hbeat',
+            AttributesToGet:['day','beat_count'],
+            Select:'SPECIFIC_ATTRIBUTES',
+            KeyConditions:{
+                appId:{
+                    ComparisonOperator:'EQ',
+                    AttributeValueList:[{S:app_id}]
+                },
+                day:{
+                    ComparisonOperator:'BETWEEN',
+                    AttributeValueList:[{N:start.toString()},{N:stop.toString()}]
+                }
+            }
+            };
+
+	dynamo.query(params, function(err, data) {
+          if (err!=null || data == null || typeof data.Items == "undefined") {
+                callback(null);
+          }
+	  else    
+          {
+              var result={hbeats:[]};
+              
+              console.log(JSON.stringify(data));
+              var items=data.Items;
+              for(var i in items)
+              {
+                  console.log(JSON.stringify(items[i]));
+                    var hbeat=new data_model.hbeat(app_id);
+                    hbeat.beat_count=parseInt(items[i].beat_count.N);
+                    hbeat.day=items[i].day.S;
+              
+                    result.hbeats.push(hbeat);
+              }
+              callback(result);
           }
 	});
     
@@ -130,7 +175,7 @@ function read_user_from_waiting_list(id,callback)
 
 function store_feedback(app_id,body,callback)
 {
-    var timestamp=datetime.getTimestamp();
+    var timestamp=datetime.getNowAsLong();
     
     var params = {Item: {id:{N:timestamp.toString()},
                          app_id: {S: app_id},
@@ -148,6 +193,8 @@ function store_feedback(app_id,body,callback)
 module.exports.read_user = read_user;
 module.exports.store_user=store_user;
 module.exports.read_hbeat_today = read_hbeat_today;
+module.exports.read_hbeat_month=read_hbeat_month;
+
 module.exports.store_hbeat_today = store_hbeat_today;
 module.exports.store_user_on_waiting_list=store_user_on_waiting_list;
 module.exports.delete_user_from_waiting_list=delete_user_from_waiting_list;

@@ -18,7 +18,7 @@ function getNow()
     return today.toFormat("DD-MM-YYYY");
 }
 
-function getNowAsLong()
+function getTodayAsLong()
 {
     var day=moment();
     day.hour(0);
@@ -28,11 +28,26 @@ function getNowAsLong()
     return day.valueOf();
 }
 
-function getTimestamp()
+function getNowAsLong()
 {
     var day=moment();
     return day.valueOf();
 }
+
+function getOneMonthAgoAsLong()
+{
+    var day=moment();
+    day.subtract('months', 1);
+    return day.valueOf();
+}
+
+function getAsDayMonth(timestamp)
+{
+    var time=new moment(timestamp);
+    return time.format("DD/MM");
+}
+
 module.exports.getDayAsStr=getDayAsStr;
+module.exports.getTodayAsLong=getTodayAsLong;
 module.exports.getNowAsLong=getNowAsLong;
-module.exports.getTimestamp=getTimestamp;
+module.exports.getOneMonthAgoAsLong=getOneMonthAgoAsLong;

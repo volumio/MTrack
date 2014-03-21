@@ -13,6 +13,7 @@ var registration=require('../admin/registration.js');
 var setup_express = function(app, passport)
 {
     app.get('/api/1/hbeat/:appId/today', api_hbeat.get_today);
+    app.get('/api/1/hbeat/:appId/month', api_hbeat.get_month);
     app.post('/api/1/hbeat/:appId', api_hbeat.store_today);
     app.post('/api/1/feedback/:appId', api_feedback.store_feedback);
     

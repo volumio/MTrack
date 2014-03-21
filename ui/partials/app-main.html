@@ -1,16 +1,18 @@
 
 <div class="panel panel-default">
-  <div class="panel-heading">
-    <h3 class="panel-title">AutoBluetooth</h3>
-  </div>
-  <div class="panel-body">
-    <button type="button" class="btn btn-default btn-lg" ng-click="refresh_hbeat()">
-  <span class="glyphicon glyphicon-heart"></span> Heart beats for today<b/><h1>{{hbeat_today}}</h1>
-</button>
-      
-      <canvas id="myChart" width="800" height="200"></canvas>
-      <script src="../js/Chart.min.js"></script>
-      <script type="text/javascript">
-         </script>
-  </div>
+    <div class="panel-heading">
+        <h3 class="panel-title">Heart beats (Active users per day)</h3>
+    </div>
+    <div class="panel-body">
+        <table style="width:100%">
+            <tr>
+                <td><button type="button" class="btn btn-default btn-lg" ng-click="refresh_hbeat()">
+                        <span class="glyphicon glyphicon-heart"></span> Heart beats for today<b/><h1>{{hbeat_today}}</h1>
+                    </button></td>
+                <td><canvas id="myChart" width="400" height="200"></canvas></td> 
+            </tr>
+
+        </table>
+
+    </div>
 </div>

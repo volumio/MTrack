@@ -21,7 +21,6 @@ function store_today(req, res) {
         data_storage.read_hbeat_today(app_id, function(beat) {
 
             var data_to_upload;
-            console.log(beat);
             if (beat == null)
             {
                 data_to_upload = new data_model.hbeat(app_id);
@@ -66,7 +65,31 @@ function get_today(req, res)
     else res.send(400, 'AppID should be specified');
 }
 
+function get_month(req, res)
+{
+    if (req.params.appId !== undefined)
+    {
+        data_storage.read_hbeat_month(req.params.appId, function(beat) {
+            api_log.log("Callbacked value " + beat);
+
+            var data_to_upload;
+
+            if (beat == null)
+            {
+                data_to_upload = {};
+
+            }
+            else
+                data_to_upload = beat;
+
+            res.json(data_to_upload);
+        });
+    }
+    else res.send(400, 'AppID should be specified');
+}
+
 
 module.exports.store_today = store_today;
 module.exports.get_today = get_today;
+module.exports.get_month=get_month;
 
