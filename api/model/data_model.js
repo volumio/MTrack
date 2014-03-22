@@ -22,7 +22,7 @@ function hbeat(app_id)
 {
     this.app_id=app_id;
     this.beat_count=0;
-    this.day=datetime.getNowAsLong();
+    this.day=datetime.getTodayAsLong();
 }
 
 module.exports.hbeat=hbeat;
