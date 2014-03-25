@@ -70,8 +70,7 @@ function get_month(req, res)
     if (req.params.appId !== undefined)
     {
         data_storage.read_hbeat_month(req.params.appId, function(beat) {
-            api_log.log("Callbacked value " + beat);
-
+            
             var data_to_upload;
 
             if (beat == null)

@@ -1,18 +1,38 @@
 
-<div class="panel panel-default">
-    <div class="panel-heading">
-        <h3 class="panel-title">Heart beats (Active users per day)</h3>
+<div>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">Heart beats (Active users per day)</h3>
+        </div>
+        <div class="panel-body">
+            <table style="width:100%">
+                <tr>
+                    <td><button type="button" class="btn btn-default btn-lg" ng-click="refresh_hbeat()">
+                            <span class="glyphicon glyphicon-heart"></span> Heart beats for today<b/><h1>{{hbeat_today}}</h1>
+                        </button></td>
+                    <td><canvas id="myChart" width="400" height="200"></canvas></td> 
+                </tr>
+
+            </table>
+
+        </div>
     </div>
-    <div class="panel-body">
-        <table style="width:100%">
-            <tr>
-                <td><button type="button" class="btn btn-default btn-lg" ng-click="refresh_hbeat()">
-                        <span class="glyphicon glyphicon-heart"></span> Heart beats for today<b/><h1>{{hbeat_today}}</h1>
-                    </button></td>
-                <td><canvas id="myChart" width="400" height="200"></canvas></td> 
-            </tr>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">Feedbacks
+        </div>
+        <div class="panel-body">
+            <ul class="list-group" ng-repeat="feedback in feedbacks">
+                <li class="list-group-item"><b>{{feedback.timestamp_str}}</b>
+                    <br/>{{feedback.text}}
+                    <br/>
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-danger btn-group-sm" ng-click="delete_feedback(feedback.id)">Delete</button>
+                        <a  class="btn btn-success btn-group-sm" href="mailto:{{feedback.email}}">Reply</a>
 
-        </table>
-
+                    </div>
+                </li>
+            </ul>
+        </div>
     </div>
 </div>

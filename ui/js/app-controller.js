@@ -43,7 +43,7 @@ appModule.controller('AppController', function($scope, $routeParams, $http) {
                     for(var i in hbeats)
                     {
                         
-                        var time=new moment();
+                        var time=new moment(hbeats[i].day);
                         graph_data.labels.push(time.format("DD/MM"));
                         
                         graph_data.datasets[0].data.push(hbeats[i].beat_count);
@@ -52,6 +52,45 @@ appModule.controller('AppController', function($scope, $routeParams, $http) {
                     $scope.refresh_graph();
                 }).error(function(data, status, headers, config) {
             $scope.hbeat_graph_data = 0;
+        });
+    }
+    
+    $scope.get_feedbacks = function()
+    {
+        $http.get('/api/1/feedback/' + $routeParams.appId , {headers: {'Content-Type': 'application/json'}})
+                .success(function(data) {
+                    
+                    for(var i in data.feedbacks)
+                    {
+                        var feedback=data.feedbacks[i];
+                        var time=new moment(parseInt(feedback.id));
+                        feedback.timestamp_str=time.format("DD/MM HH:mm:ss");
+                    }
+                    $scope.feedbacks = data.feedbacks;
+                }).error(function(data, status, headers, config) {
+            $scope.feedbacks = null;
+            alert("Error " + status + " " + data);
+        });
+    }
+    
+    $scope.delete_feedback=function(id)
+    {
+        var r=confirm("Delete feedback?");
+        if (r==true)
+        {
+          $scope.delete_feedbacks(id);  
+          
+        }
+        
+    }
+    
+    $scope.delete_feedbacks = function(id)
+    {
+        $http.delete('/api/1/feedback/' + $routeParams.appId +'/'+id, {headers: {'Content-Type': 'application/json'}})
+                .success(function(data) {
+                    $scope.get_feedbacks();
+                }).error(function(data, status, headers, config) {
+           
         });
     }
 
@@ -70,4 +109,5 @@ appModule.controller('AppController', function($scope, $routeParams, $http) {
     $scope.refresh_hbeat();
     $scope.refresh_hbeat_graph();
     $scope.refresh_graph();
+    $scope.get_feedbacks();
 }); 

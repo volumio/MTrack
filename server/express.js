@@ -16,6 +16,8 @@ var setup_express = function(app, passport)
     app.get('/api/1/hbeat/:appId/month', api_hbeat.get_month);
     app.post('/api/1/hbeat/:appId', api_hbeat.store_today);
     app.post('/api/1/feedback/:appId', api_feedback.store_feedback);
+    app.get('/api/1/feedback/:appId', api_feedback.read_feedbacks);
+    app.delete('/api/1/feedback/:appId/:id', api_feedback.delete_feedback);
     
     app.post('/login', passport.authenticate('local', {successRedirect: '/admin/private/index.html', failureRedirect: '/admin/public/login.html'}));
     app.post('/register', registration.process_registration);

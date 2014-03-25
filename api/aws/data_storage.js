@@ -109,17 +109,15 @@ function read_hbeat_month(app_id,callback)
           {
               var result={hbeats:[]};
               
-              console.log(JSON.stringify(data));
               var items=data.Items;
               for(var i in items)
               {
-                  console.log(JSON.stringify(items[i]));
                     var hbeat=new data_model.hbeat(app_id);
                     hbeat.beat_count=parseInt(items[i].beat_count.N);
-                    hbeat.day=items[i].day.S;
-              
+                    hbeat.day=parseInt(items[i].day.N);
                     result.hbeats.push(hbeat);
               }
+              
               callback(result);
           }
 	});
@@ -182,19 +180,79 @@ function store_feedback(app_id,body,callback)
 			    text:{S:body.text}},
 			  TableName: 'mtrack-feedbacks'};
 
-    console.log(params);
-	dynamo.putItem(params, function(err, data) {
+    if(typeof body.email!='undefined')
+    {
+        params.Item.email={S:body.email};
+    }
+    
+    dynamo.putItem(params, function(err, data) {
         console.log(err);
 	  if (err) callback("ERR_PUTTING_USER");
 	  else    callback(null);
 	});
     
 }
+
+function read_feedbacks(app_id,callback)
+{
+    var params = {TableName: 'mtrack-feedbacks',
+            Select:'ALL_ATTRIBUTES',
+            KeyConditions:{
+                app_id:{
+                    ComparisonOperator:'EQ',
+                    AttributeValueList:[{S:app_id}]
+            }}
+            };
+
+	dynamo.query(params, function(err, data) {
+          if (err!=null || data == null || typeof data.Items == "undefined") {
+                callback(null);
+          }
+	  else    
+          {
+              var result={feedbacks:[]};
+              
+              var items=data.Items;
+              for(var i in items)
+              {
+                  
+                    var feedback=new data_model.feedback(app_id);
+                    feedback.id=items[i].id.N;
+                    feedback.text=items[i].text.S;
+                    
+                    if(typeof items[i].email!='undefined')
+                        feedback.email=items[i].email.S;
+                    
+                    result.feedbacks.push(feedback);
+                    console.log(feedback);
+                    
+              }
+              
+              callback(result);
+          }
+	});
+    
+}
+
+function delete_feedback(app_id,id,callback)
+{
+    var params = {TableName: 'mtrack-feedbacks',
+            Key:{
+                app_id:{S:app_id},
+                id:{N:id}
+            }};
+
+	dynamo.deleteItem(params, function(err, data) {
+            console.log(err);
+                callback(err);
+            });
+    
+}
+
 module.exports.read_user = read_user;
 module.exports.store_user=store_user;
 module.exports.read_hbeat_today = read_hbeat_today;
 module.exports.read_hbeat_month=read_hbeat_month;
-
 module.exports.store_hbeat_today = store_hbeat_today;
 module.exports.store_user_on_waiting_list=store_user_on_waiting_list;
 module.exports.delete_user_from_waiting_list=delete_user_from_waiting_list;
@@ -202,3 +260,5 @@ module.exports.read_user_from_waiting_list=read_user_from_waiting_list;
 
 
 module.exports.store_feedback=store_feedback;
+module.exports.read_feedbacks=read_feedbacks;
+module.exports.delete_feedback=delete_feedback;
