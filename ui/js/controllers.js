@@ -11,8 +11,11 @@ mtrackApp.config(['$routeProvider',
         templateUrl: '../partials/app-main.html',
         controller: 'AppController'
       }).
+      when('/',{
+        templateUrl: '../partials/no-app-selected.html',
+        controller: 'PhoneListCtrl'}).
       otherwise({
-        redirectTo: '../partials/no-app-selected.html'
+        redirectTo: '/'
       });
   }]);
 
