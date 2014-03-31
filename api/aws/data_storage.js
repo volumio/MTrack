@@ -193,7 +193,7 @@ function store_feedback(app_id,body,callback)
     
 }
 
-function read_feedbacks(app_id,callback)
+function list_feedbacks(app_id,callback)
 {
     var params = {TableName: 'mtrack-feedbacks',
             Select:'ALL_ATTRIBUTES',
@@ -249,6 +249,76 @@ function delete_feedback(app_id,id,callback)
     
 }
 
+function store_exception(app_id,body,callback)
+{
+    var timestamp=datetime.getNowAsLong();
+   
+    var params = {Item: {app_id: {S: app_id},
+			             id:{N:timestamp.toString()},
+                         exception:{S:body.exception},
+                         os_type:{S:body.ostype},
+                         os_version:{S:body.osversion}},
+			  TableName: 'mtrack-exceptions'};
+	dynamo.putItem(params, function(err, data) {
+        console.log(err);
+	  if (err) callback("ERR_PUTTING_EXCEPTION");
+	  else    callback(null);
+	});
+}
+
+function list_exception(app_id,callback)
+{
+    var params = {TableName: 'mtrack-exceptions',
+            Select:'ALL_ATTRIBUTES',
+            KeyConditions:{
+                app_id:{
+                    ComparisonOperator:'EQ',
+                    AttributeValueList:[{S:app_id}]
+            }}
+            };
+
+	dynamo.query(params, function(err, data) {
+          if (err!=null || data == null || typeof data.Items == "undefined") {
+                callback(null);
+          }
+	  else    
+          {
+              var result={exceptions:[]};
+              
+              var items=data.Items;
+              for(var i in items)
+              {
+                  
+                    var exception=new data_model.exception(app_id);
+                    exception.id=items[i].id.N;
+                    exception.exception=items[i].exception.S;
+                    exception.os_type=items[i].os_type.S;
+                    exception.os_version=items[i].os_version.S;
+                     
+                    result.exceptions.push(exception);
+              }
+              
+              callback(result);
+          }
+	});
+    
+}
+
+function delete_exception(app_id,id,callback)
+{
+    var params = {TableName: 'mtrack-exceptions',
+            Key:{
+                app_id:{S:app_id},
+                id:{N:id}
+            }};
+
+	dynamo.deleteItem(params, function(err, data) {
+            console.log(err);
+                callback(err);
+            });
+    
+}
+
 module.exports.read_user = read_user;
 module.exports.store_user=store_user;
 module.exports.read_hbeat_today = read_hbeat_today;
@@ -260,5 +330,9 @@ module.exports.read_user_from_waiting_list=read_user_from_waiting_list;
 
 
 module.exports.store_feedback=store_feedback;
-module.exports.read_feedbacks=read_feedbacks;
+module.exports.list_feedbacks=list_feedbacks;
 module.exports.delete_feedback=delete_feedback;
+
+module.exports.store_exception=store_exception;
+module.exports.list_exception=list_exception;
+module.exports.delete_exception=delete_exception;

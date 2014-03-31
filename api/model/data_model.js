@@ -31,7 +31,13 @@ function feedback(app_id)
     
 }
 
+function exception(app_id)
+{
+    this.app_id=app_id;
+}
+
 module.exports.hbeat=hbeat;
 module.exports.user=user;
 module.exports.user_waiting_list=user_waiting_list;
 module.exports.feedback=feedback;
+module.exports.exception=exception;

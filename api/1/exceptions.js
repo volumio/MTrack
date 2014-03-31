@@ -8,10 +8,10 @@ var api_errors = require('./errors.js');
 
 var data_storage = require('../../server/backend_config.js').get_data_storage();
 
-function store_feedback(req,res) {
+function store_exception(req,res) {
    if (req.params.appId !== undefined)
     {
-        data_storage.store_feedback(req.params.appId, req.body, function(err)
+        data_storage.store_exception(req.params.appId, req.body, function(err)
         {
             if (err == null)
                 res.end();
@@ -21,11 +21,11 @@ function store_feedback(req,res) {
     else res.send(400, 'AppID should be specified');
 }
 
-function list_feedbacks(req,res)
+function list_exceptions(req,res)
 {
     if (req.params.appId !== undefined)
     {
-        data_storage.list_feedbacks(req.params.appId,  function(data)
+        data_storage.list_exception(req.params.appId,  function(data)
         {
             var data_to_upload;
 
@@ -43,11 +43,11 @@ function list_feedbacks(req,res)
     else res.send(400, 'AppID should be specified');
 }
 
-function delete_feedback(req,res)
+function delete_exception(req,res)
 {
     if (req.params.appId !== undefined && req.params.id !== undefined)
     {
-        data_storage.delete_feedback(req.params.appId, req.params.id, function(err)
+        data_storage.delete_exception(req.params.appId, req.params.id, function(err)
         {
             if(err==null)
                 res.end();
@@ -57,7 +57,6 @@ function delete_feedback(req,res)
     else res.send(400, 'AppID should be specified');
 }
 
-module.exports.store_feedback=store_feedback;
-module.exports.list_feedbacks=list_feedbacks;
-module.exports.delete_feedback=delete_feedback;
-
+module.exports.store_exception=store_exception;
+module.exports.list_exceptions=list_exceptions;
+module.exports.delete_exception=delete_exception;
