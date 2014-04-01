@@ -96,6 +96,24 @@ appModule.controller('AppController', function($scope, $routeParams, $http) {
 
     $scope.onViewLoad = function() {
     };
+    
+    $scope.get_exceptions = function()
+    {
+        $http.get('/api/1/exceptions/' + $routeParams.appId , {headers: {'Content-Type': 'application/json'}})
+                .success(function(data) {
+                    
+                    for(var i in data.exceptions)
+                    {
+                        var exception=data.exceptions[i];
+                        var time=new moment(parseInt(exception.id));
+                        exception.timestamp_str=time.format("DD/MM HH:mm:ss");
+                    }
+                    $scope.exceptions = data.exceptions;
+                }).error(function(data, status, headers, config) {
+            $scope.exceptions = null;
+            alert("Error " + status + " " + data);
+        });
+    }
 
 
 
@@ -110,4 +128,5 @@ appModule.controller('AppController', function($scope, $routeParams, $http) {
     $scope.refresh_hbeat_graph();
     $scope.refresh_graph();
     $scope.get_feedbacks();
+    $scope.get_exceptions();
 }); 

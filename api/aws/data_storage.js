@@ -54,8 +54,7 @@ function store_hbeat_today(hbeat,callback)
                         appId:{S:hbeat.app_id}},
 			  TableName: 'mtrack-hbeat'};
 	dynamo.putItem(params, function(err, data) {
-            console.log(err);
-	  if (err) callback("ERR_PUTTING_USER");
+      if (err) callback("ERR_PUTTING_USER");
 	  else    callback(null);
 	});
     
@@ -186,8 +185,7 @@ function store_feedback(app_id,body,callback)
     }
     
     dynamo.putItem(params, function(err, data) {
-        console.log(err);
-	  if (err) callback("ERR_PUTTING_USER");
+      if (err) callback("ERR_PUTTING_USER");
 	  else    callback(null);
 	});
     
@@ -224,7 +222,6 @@ function list_feedbacks(app_id,callback)
                         feedback.email=items[i].email.S;
                     
                     result.feedbacks.push(feedback);
-                    console.log(feedback);
                     
               }
               
@@ -260,8 +257,7 @@ function store_exception(app_id,body,callback)
                          os_version:{S:body.osversion}},
 			  TableName: 'mtrack-exceptions'};
 	dynamo.putItem(params, function(err, data) {
-        console.log(err);
-	  if (err) callback("ERR_PUTTING_EXCEPTION");
+      if (err) callback("ERR_PUTTING_EXCEPTION");
 	  else    callback(null);
 	});
 }
@@ -313,7 +309,6 @@ function delete_exception(app_id,id,callback)
             }};
 
 	dynamo.deleteItem(params, function(err, data) {
-            console.log(err);
                 callback(err);
             });
     
