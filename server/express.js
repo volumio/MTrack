@@ -10,6 +10,7 @@ var api_feedback=require('../api/1/feedback.js');
 var api_exceptions=require('../api/1/exceptions.js');
 var api_logging=require('../api/misc/logging.js');
 var registration=require('../admin/registration.js');
+var app_man=require('../admin/app_management.js');
 
 var setup_express = function(app, passport)
 {
@@ -30,13 +31,20 @@ var setup_express = function(app, passport)
     app.post('/register', registration.process_registration);
     app.get('/activate/:userId',registration.activate_user);
     
-    app.use('/admin/private/*', passport.authenticate('local'), express.static(__dirname + '/../ui/private'));
+    app.post('/admin/create_app', ensureAuthenticated,app_man.create_app);
+    app.use('/admin/private/*', ensureAuthenticated, express.static(__dirname + '/../ui/private'));
+    /* app.use('/admin/private/*', passport.authenticate('local'), express.static(__dirname + '/../ui/private'));*/
     app.use('/admin', express.static(__dirname + '/../ui'));
     app.use(function(err, req, res, next) {
         console.error(err.stack);
         res.send(500, 'Unexpected error');
     });
     
+}
+
+function ensureAuthenticated(req, res, next) {
+  if (req.isAuthenticated()) { return next(); }
+  res.redirect('/admin/public/login.html');
 }
 //, {failureRedirect: '/admin/login.html'}
 module.exports.setup_express = setup_express;

@@ -11,6 +11,9 @@ mtrackApp.config(['$routeProvider',
         templateUrl: '../partials/app-main.html',
         controller: 'AppController'
       }).
+      when('/create_app', {
+        templateUrl: '../partials/create-new-app.html'
+      }).
       when('/',{
         templateUrl: '../partials/no-app-selected.html',
         controller: 'PhoneListCtrl'}).
