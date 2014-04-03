@@ -23,9 +23,9 @@ var setup_express = function(app, passport)
     app.get('/api/1/feedback/:appId', api_feedback.list_feedbacks);
     app.delete('/api/1/feedback/:appId/:id', api_feedback.delete_feedback);
     
-    app.post('/api/1/exceptions/:appId', api_exceptions.store_exception);
-    app.get('/api/1/exceptions/:appId', api_exceptions.list_exceptions);
-    app.delete('/api/1/exceptions/:appId/:id', api_exceptions.delete_exception);
+    app.post('/api/1/exception/:appId', api_exceptions.store_exception);
+    app.get('/api/1/exception/:appId', api_exceptions.list_exceptions);
+    app.delete('/api/1/exception/:appId/:id', api_exceptions.delete_exception);
     
     
     app.post('/login', passport.authenticate('local', {successRedirect: '/admin/private/index.html', failureRedirect: '/admin/public/login.html'}));

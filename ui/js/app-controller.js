@@ -1,6 +1,8 @@
 var appModule = angular.module('AppControllers', []);
 appModule.controller('AppController', function($scope, $routeParams, $http) {
     $scope.hbeat_today = 0;
+    $scope.app_id=$routeParams.appId;
+    
     $scope.hbeat_graph_data = {
         labels: ["Loading data..."],
         datasets: [
@@ -93,13 +95,10 @@ appModule.controller('AppController', function($scope, $routeParams, $http) {
            
         });
     }
-
-    $scope.onViewLoad = function() {
-    };
-    
+ 
     $scope.get_exceptions = function()
     {
-        $http.get('/api/1/exceptions/' + $routeParams.appId , {headers: {'Content-Type': 'application/json'}})
+        $http.get('/api/1/exception/' + $routeParams.appId , {headers: {'Content-Type': 'application/json'}})
                 .success(function(data) {
                     
                     for(var i in data.exceptions)
@@ -112,6 +111,27 @@ appModule.controller('AppController', function($scope, $routeParams, $http) {
                 }).error(function(data, status, headers, config) {
             $scope.exceptions = null;
             alert("Error " + status + " " + data);
+        });
+    }
+    
+    $scope.delete_exception=function(app_id,id)
+    {
+        var r=confirm("Delete exception trace?");
+        if (r==true)
+        {
+          $scope.delete_exception_by_id(app_id,id);  
+          
+        }
+        
+    }
+    
+    $scope.delete_exception_by_id = function(app_id,id)
+    {
+        $http.delete('/api/1/exception/' + app_id +'/'+id, {headers: {'Content-Type': 'application/json'}})
+                .success(function(data) {
+                    $scope.get_exceptions();
+                }).error(function(data, status, headers, config) {
+           alert(status+"\n"+data);
         });
     }
 
