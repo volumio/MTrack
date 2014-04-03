@@ -11,6 +11,7 @@ var api_exceptions=require('../api/1/exceptions.js');
 var api_logging=require('../api/misc/logging.js');
 var registration=require('../admin/registration.js');
 var app_man=require('../admin/app_management.js');
+var user_man=require('../admin/user_management.js');
 
 var setup_express = function(app, passport)
 {
@@ -32,6 +33,9 @@ var setup_express = function(app, passport)
     app.get('/activate/:userId',registration.activate_user);
     
     app.post('/admin/create_app', ensureAuthenticated,app_man.create_app);
+    app.get('/admin/user', ensureAuthenticated,user_man.get_user);
+    app.get('/admin/app/:appId', ensureAuthenticated,user_man.get_app);
+    
     app.use('/admin/private/*', ensureAuthenticated, express.static(__dirname + '/../ui/private'));
     /* app.use('/admin/private/*', passport.authenticate('local'), express.static(__dirname + '/../ui/private'));*/
     app.use('/admin', express.static(__dirname + '/../ui'));

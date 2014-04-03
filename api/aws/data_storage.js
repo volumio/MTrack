@@ -27,6 +27,13 @@ function read_user(username, callback)
               user.password=data.Item.password.S;
               user.fullname=data.Item.fullname.S;
               user.company=data.Item.company.S;
+              
+                if(typeof data.Item.apps != 'undefined')
+                {
+                for( var i in data.Item.apps.SS)
+                    user.apps.push(data.Item.apps.SS[i]);
+            }
+            
               callback(user);
           }
 	});
@@ -37,10 +44,42 @@ function store_user(user,callback)
     var params = {Item: {username: {S: user.username},
 			 password:{S:user.password},
                         fullname:{S:user.fullname},
-                            company:{S:user.company}},
+                            company:{S:user.company},
+                        apps:{SS:user.apps}},
 			  TableName: 'mtrack-users'};
 	dynamo.putItem(params, function(err, data) {
 	  if (err) callback("ERR_PUTTING_USER");
+	  else    callback(null);
+	});
+}
+
+
+function read_app(app_id, callback)
+{
+    var params = {Key: {app_id: {S: app_id}},
+                    TableName: 'mtrack-apps',ConsistentRead: true };
+
+	dynamo.getItem(params, function(err, data) {
+	  if (err || data == null || typeof data.Item == "undefined") callback(null);
+	  else    
+          {
+              var app=new data_model.app(app_id);
+              app.name=data.Item.name.S;
+              app.username=data.Item.username.S;
+              callback(app);
+          }
+	});
+}
+
+function store_app(app,callback)
+{
+    var params = {Item: {app_id: {S: app.app_id.toString()},
+			 name:{S:app.name},
+                        username:{S:app.username}},
+			  TableName: 'mtrack-apps'};
+	dynamo.putItem(params, function(err, data) {
+            console.log(err);
+	  if (err) callback("ERR_PUTTING_APP");
 	  else    callback(null);
 	});
 }
@@ -316,6 +355,10 @@ function delete_exception(app_id,id,callback)
 
 module.exports.read_user = read_user;
 module.exports.store_user=store_user;
+
+module.exports.read_app=read_app;
+module.exports.store_app=store_app;
+
 module.exports.read_hbeat_today = read_hbeat_today;
 module.exports.read_hbeat_month=read_hbeat_month;
 module.exports.store_hbeat_today = store_hbeat_today;

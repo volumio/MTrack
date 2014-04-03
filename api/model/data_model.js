@@ -10,6 +10,12 @@ function user(username)
     this.password="";
     this.fullname="";
     this.company="";
+    this.apps=[];
+}
+
+function app(id)
+{
+    this.app_id=id;
 }
 
 function user_waiting_list(UUID,username)
@@ -38,6 +44,7 @@ function exception(app_id)
 
 module.exports.hbeat=hbeat;
 module.exports.user=user;
+module.exports.app=app;
 module.exports.user_waiting_list=user_waiting_list;
 module.exports.feedback=feedback;
 module.exports.exception=exception;
