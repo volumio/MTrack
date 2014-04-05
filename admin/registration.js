@@ -78,6 +78,7 @@ function activate_user(req,res)
     },
     function(callback)
     {
+        console.log(user);
         storage_service.store_user(user,callback);
     },
     function(callback)

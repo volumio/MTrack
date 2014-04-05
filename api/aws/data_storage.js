@@ -44,11 +44,18 @@ function store_user(user,callback)
     var params = {Item: {username: {S: user.username},
 			 password:{S:user.password},
                         fullname:{S:user.fullname},
-                            company:{S:user.company},
-                        apps:{SS:user.apps}},
+                            company:{S:user.company}
+                        },
 			  TableName: 'mtrack-users'};
+                      
+                      //apps:{SS:user.apps}
+        if(user.apps.length>0)
+        {
+            params.Item.apps.SS=user.apps;
+        }
+        
 	dynamo.putItem(params, function(err, data) {
-	  if (err) callback("ERR_PUTTING_USER");
+         if (err) callback("ERR_PUTTING_USER");
 	  else    callback(null);
 	});
 }
@@ -290,7 +297,7 @@ function store_exception(app_id,body,callback)
     var timestamp=datetime.getNowAsLong();
    
     var params = {Item: {app_id: {S: app_id},
-			             id:{N:timestamp.toString()},
+			 id:{N:timestamp.toString()},
                          exception:{S:body.exception},
                          os_type:{S:body.ostype},
                          os_version:{S:body.osversion}},
