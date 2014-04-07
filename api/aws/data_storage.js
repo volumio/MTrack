@@ -51,7 +51,7 @@ function store_user(user,callback)
                       //apps:{SS:user.apps}
         if(user.apps.length>0)
         {
-            params.Item.apps.SS=user.apps;
+            params.Item.apps={SS:user.apps};
         }
         
 	dynamo.putItem(params, function(err, data) {
