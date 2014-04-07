@@ -173,12 +173,16 @@ function store_user_on_waiting_list(UUID,user,callback)
 {
     var params = {Item: {UUID:{S:UUID},
                             username: {S: user.username},
-			    password:{S:user.password},
-                            fullname:{S:user.fullname},
-                            company:{S:user.company}},
+			    password:{S:user.password}},
 			  TableName: 'mtrack-users-waiting-list'};
 
-	dynamo.putItem(params, function(err, data) {
+    if(user.fullname == '')
+        params.Item.fullname={S:'Not set'};
+    
+    if(user.company != '')
+        params.Item.company={S:'Not set'};
+        
+    dynamo.putItem(params, function(err, data) {
 	  if (err) callback("ERR_PUTTING_USER");
 	  else    callback(null);
 	});
