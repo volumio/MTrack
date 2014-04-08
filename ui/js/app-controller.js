@@ -3,6 +3,14 @@ appModule.controller('AppController', function($scope, $routeParams, $http) {
     $scope.hbeat_today = 0;
     $scope.app_id=$routeParams.appId;
     
+    $http.get('/admin/app/'+$routeParams.appId, {headers: {'Content-Type': 'application/json'}}).success(function (app){
+       if(app!=null)
+       {
+           $scope.app_details=app;
+       }
+    });
+    
+    
     $scope.hbeat_graph_data = {
         labels: ["Loading data..."],
         datasets: [
@@ -15,6 +23,7 @@ appModule.controller('AppController', function($scope, $routeParams, $http) {
             }
         ]
     }
+    
     $scope.refresh_hbeat = function()
     {
         $http.get('/api/1/hbeat/' + $routeParams.appId + '/today', {headers: {'Authorization': '0GqtOtD4SSrJ1MUXj0ffkXLTt0a9ujYCZF6hMLtqfX7W0LA2SVQ3jPouAwgGnSa0'}})

@@ -10,6 +10,10 @@ mtrackApp.config(['$routeProvider',
                     templateUrl: '../partials/app-main.html',
                     controller: 'AppController'
                 }).
+                when('/app_settings/:appId', {
+                    templateUrl: '../partials/app-settings.html',
+                    controller: 'AppSettingsController'
+                }).
                 when('/create_app', {
                     templateUrl: '../partials/create-new-app.html'
                 }).
