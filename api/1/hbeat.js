@@ -47,8 +47,6 @@ function get_today(req, res)
     if (req.params.appId !== undefined)
     {
         data_storage.read_hbeat_today(req.params.appId, function(beat) {
-            api_log.log("Callbacked value " + beat);
-
             var data_to_upload;
 
             if (beat == null)
