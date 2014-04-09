@@ -320,7 +320,8 @@ function list_exception(app_id,callback)
                 app_id:{
                     ComparisonOperator:'EQ',
                     AttributeValueList:[{S:app_id}]
-            }}
+            }},
+                  ScanIndexForward:false
             };
 
 	dynamo.query(params, function(err, data) {
