@@ -78,8 +78,6 @@ function store_today(req, res) {
                 }
             }
             
-            console.log(data_to_upload);
-    
             data_storage.store_hbeat_today( data_to_upload, function(err)
             {
                 if (err == null)
