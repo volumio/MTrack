@@ -28,7 +28,58 @@ function store_today(req, res) {
             else data_to_upload = beat;
 
             data_to_upload.beat_count = data_to_upload.beat_count + 1;
-
+            
+            if(typeof req.body != 'undefined')
+            {
+                if(typeof req.body.locale !='undefined')
+                {
+                    var locale=req.body.locale;
+                    var locale_array;
+                    
+                    if(typeof data_to_upload.locale != 'undefined')
+                    {
+                        locale_array=data_to_upload.locale;
+                    }
+                    else locale_array={};
+                    
+                    var count=0;
+                    if(typeof locale_array[locale]!='undefined')
+                    {
+                        count=locale_array[locale];
+                    }
+                    
+                    count=count+1;
+                    locale_array[locale]=count;
+                    
+                    data_to_upload.locale=locale_array;
+                }
+                
+                if(typeof req.body.osversion !='undefined')
+                {
+                    var osversion=req.body.osversion;
+                    var osversion_array;
+                    
+                    if(typeof data_to_upload.osversion != 'undefined')
+                    {
+                        osversion_array=data_to_upload.osversion;
+                    }
+                    else osversion_array={};
+                    
+                    var count=0;
+                    if(typeof osversion_array[osversion]!='undefined')
+                    {
+                        count=osversion_array[osversion];
+                    }
+                    
+                    count=count+1;
+                    osversion_array[osversion]=count;
+                    
+                    data_to_upload.osversion=osversion_array;
+                }
+            }
+            
+            console.log(data_to_upload);
+    
             data_storage.store_hbeat_today( data_to_upload, function(err)
             {
                 if (err == null)

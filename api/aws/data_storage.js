@@ -99,6 +99,13 @@ function store_hbeat_today(hbeat,callback)
 			 day:{N:hbeat.day.toString()},
                         appId:{S:hbeat.app_id}},
 			  TableName: 'mtrack-hbeat'};
+                      
+    if(typeof hbeat.locale != 'undefined')
+        params.Item.locale={S:JSON.stringify(hbeat.locale)};
+    
+    if(typeof hbeat.osversion != 'undefined')
+        params.Item.osversion={S:JSON.stringify(hbeat.osversion)};
+    
 	dynamo.putItem(params, function(err, data) {
       if (err) callback("ERR_PUTTING_USER");
 	  else    callback(null);
@@ -120,6 +127,13 @@ function read_hbeat_today(app_id,callback)
               var hbeat=new data_model.hbeat(app_id);
               hbeat.beat_count=parseInt(data.Item.beat_count.N);
               hbeat.day=data.Item.day.N;
+              
+              if(typeof data.Item.locale != 'undefined')
+                  hbeat.locale=JSON.parse(data.Item.locale.S);
+              
+              if(typeof data.Item.osversion != 'undefined')
+                  hbeat.osversion=JSON.parse(data.Item.osversion.S);
+              
               callback(hbeat);
           }
 	});
