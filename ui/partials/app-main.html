@@ -41,7 +41,19 @@
                             </tr>
                         </table>
                         
-                    </td></tr>
+                    </td>
+                
+                    <td>
+                        <table style="width:100%">
+                            <tr>
+                                <td style="width:250px" ><b>Application version</b><br/> <canvas id="appversionChart" width="200" height="200"></canvas>
+                                </td>
+                                <td align="left"><div ng-repeat="app in hbeat_appversion_data_strings| orderBy :'-value'"><span class="square" style="background-color:#f2b829;"></span><b>{{app.key}}</b>: {{app.value}}</div> </td>
+                            </tr>
+                        </table>
+                        
+                    </td>
+                </tr>
             </table>
         </div>
     </div>

@@ -152,7 +152,7 @@ function read_hbeat_month(app_id,callback)
     var start=datetime.getOneMonthAgoAsLong();
     
     var params = {TableName: 'mtrack-hbeat',
-            AttributesToGet:['day','beat_count','locale','osversion'],
+            AttributesToGet:['day','beat_count','locale','osversion','appversion'],
             Select:'SPECIFIC_ATTRIBUTES',
             KeyConditions:{
                 appId:{
@@ -186,6 +186,9 @@ function read_hbeat_month(app_id,callback)
               
                     if(typeof items[i].osversion != 'undefined')
                         hbeat.osversion=JSON.parse(items[i].osversion.S);
+                    
+                    if(typeof items[i].appversion != 'undefined')
+                        hbeat.appversion=JSON.parse(items[i].appversion.S);
               
                     result.hbeats.push(hbeat);
               }

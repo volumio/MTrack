@@ -13,6 +13,12 @@ appModule.controller('AppController', function($scope, $routeParams, $http, $int
 		color : "#E2EAE9"
 	}];
     $scope.hbeat_osversion_data_strings=[{key:"Not set",value:0}];
+    $scope.hbeat_appversion_data=[{
+		value : 50,
+		color : "#E2EAE9"
+	}];
+    $scope.hbeat_appversion_data_strings=[{key:"Not set",value:0}];
+    
     
     $http.get('/admin/app/'+$routeParams.appId, {headers: {'Content-Type': 'application/json'}}).success(function (app){
        if(app!=null)
@@ -103,11 +109,25 @@ appModule.controller('AppController', function($scope, $routeParams, $http, $int
                                 $scope.hbeat_osversion_data_strings.push({key:j,value:hbeats[i].osversion[j]});
                             }
                         }
+                        
+                        if(typeof hbeats[i].appversion !='undefined')
+                        {
+                            $scope.hbeat_appversion_data=[];
+                            $scope.hbeat_appversion_data_strings=[];
+                            
+                            for(var j in hbeats[i].appversion)
+                            {
+                                var color=$scope.getRandomColor();
+                                $scope.hbeat_appversion_data.push({value:hbeats[i].appversion[j],color : color});
+                                $scope.hbeat_appversion_data_strings.push({key:j,value:hbeats[i].appversion[j]});
+                            }
+                        }
                     }
                     $scope.hbeat_graph_data = graph_data;
                     $scope.refresh_graph();
                     $scope.refresh_locale_graph();
                     $scope.refresh_osversion_graph();
+                    $scope.refresh_appversion_graph();
         
                 }).error(function(data, status, headers, config) {
             $scope.hbeat_graph_data = 0;
@@ -213,12 +233,18 @@ appModule.controller('AppController', function($scope, $routeParams, $http, $int
         var myNewChart = new Chart(ctx).Doughnut($scope.hbeat_osversion_data);
     }
     
+    $scope.refresh_appversion_graph=function(){
+        var ctx = document.getElementById("appversionChart").getContext("2d");
+        var myNewChart = new Chart(ctx).Doughnut($scope.hbeat_appversion_data);
+    }
+    
     $scope.refresh_page_data=function()
     {
         $scope.refresh_hbeat();
         $scope.refresh_hbeat_graph();
         $scope.refresh_locale_graph();
         $scope.refresh_osversion_graph();
+        $scope.refresh_appversion_graph();
         $scope.get_feedbacks();
         $scope.get_exceptions();
     }
