@@ -76,6 +76,29 @@ function store_today(req, res) {
                     
                     data_to_upload.osversion=osversion_array;
                 }
+                
+                if(typeof req.body.appversion !='undefined')
+                {
+                    var appversion=req.body.appversion;
+                    var appversion_array;
+                    
+                    if(typeof data_to_upload.appversion != 'undefined')
+                    {
+                        appversion_array=data_to_upload.appversion;
+                    }
+                    else appversion_array={};
+                    
+                    var count=0;
+                    if(typeof appversion_array[appversion]!='undefined')
+                    {
+                        count=appversion_array[appversion];
+                    }
+                    
+                    count=count+1;
+                    appversion_array[appversion]=count;
+                    
+                    data_to_upload.appversion=appversion_array;
+                }
             }
             
             data_storage.store_hbeat_today( data_to_upload, function(err)
