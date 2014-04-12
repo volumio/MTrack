@@ -3,6 +3,17 @@ appModule.controller('AppController', function($scope, $routeParams, $http, $int
     $scope.hbeat_today = 0;
     $scope.app_id=$routeParams.appId;
     
+    $scope.hbeat_locale_data=[{
+		value : 50,
+		color : "#E2EAE9"
+	}];
+    $scope.hbeat_locale_data_strings=[{key:"Not set",value:0}];
+    $scope.hbeat_osversion_data=[{
+		value : 50,
+		color : "#E2EAE9"
+	}];
+    $scope.hbeat_osversion_data_strings=[{key:"Not set",value:0}];
+    
     $http.get('/admin/app/'+$routeParams.appId, {headers: {'Content-Type': 'application/json'}}).success(function (app){
        if(app!=null)
        {
@@ -10,6 +21,14 @@ appModule.controller('AppController', function($scope, $routeParams, $http, $int
        }
     });
     
+    $scope.getRandomColor=function() {
+        var letters = '0123456789ABCDEF'.split('');
+        var color = '#';
+        for (var i = 0; i < 6; i++ ) {
+            color += letters[Math.round(Math.random() * 15)];
+        }
+        return color;
+    }
     
     $scope.hbeat_graph_data = {
         labels: ["Loading data..."],
@@ -57,16 +76,45 @@ appModule.controller('AppController', function($scope, $routeParams, $http, $int
                         
                         var time=new moment(hbeats[i].day);
                         graph_data.labels.push(time.format("DD/MM"));
-                        
                         graph_data.datasets[0].data.push(hbeats[i].beat_count);
+                        
+                        if(typeof hbeats[i].locale !='undefined')
+                        {
+                            $scope.hbeat_locale_data=[];
+                            $scope.hbeat_locale_data_strings=[];
+                            
+                            for(var j in hbeats[i].locale)
+                            {
+                                var color=$scope.getRandomColor();
+                                $scope.hbeat_locale_data.push({value:hbeats[i].locale[j],color : color});
+                                $scope.hbeat_locale_data_strings.push({key:j,value:hbeats[i].locale[j]});
+                            }
+                        }
+                        
+                        if(typeof hbeats[i].osversion !='undefined')
+                        {
+                            $scope.hbeat_osversion_data=[];
+                            $scope.hbeat_osversion_data_strings=[];
+                            
+                            for(var j in hbeats[i].osversion)
+                            {
+                                var color=$scope.getRandomColor();
+                                $scope.hbeat_osversion_data.push({value:hbeats[i].osversion[j],color : color});
+                                $scope.hbeat_osversion_data_strings.push({key:j,value:hbeats[i].osversion[j]});
+                            }
+                        }
                     }
                     $scope.hbeat_graph_data = graph_data;
                     $scope.refresh_graph();
+                    $scope.refresh_locale_graph();
+                    $scope.refresh_osversion_graph();
         
                 }).error(function(data, status, headers, config) {
             $scope.hbeat_graph_data = 0;
         });
     }
+    
+    
     
     $scope.get_feedbacks = function()
     {
@@ -155,10 +203,22 @@ appModule.controller('AppController', function($scope, $routeParams, $http, $int
         var myNewChart = new Chart(ctx).Line($scope.hbeat_graph_data);
     }
     
+    $scope.refresh_locale_graph=function(){
+        var ctx = document.getElementById("localeChart").getContext("2d");
+        var myNewChart = new Chart(ctx).Doughnut($scope.hbeat_locale_data);
+    }
+    
+    $scope.refresh_osversion_graph=function(){
+        var ctx = document.getElementById("osversionChart").getContext("2d");
+        var myNewChart = new Chart(ctx).Doughnut($scope.hbeat_osversion_data);
+    }
+    
     $scope.refresh_page_data=function()
     {
         $scope.refresh_hbeat();
         $scope.refresh_hbeat_graph();
+        $scope.refresh_locale_graph();
+        $scope.refresh_osversion_graph();
         $scope.get_feedbacks();
         $scope.get_exceptions();
     }

@@ -16,9 +16,33 @@
                         </button></td>
                     <td><canvas id="myChart" width="400" height="200"></canvas></td> 
                 </tr>
-
+                
             </table>
-
+            <table style="width:100%">
+                <tr>
+                    <td>
+                        <table style="width:100%">
+                            <tr>
+                                <td style="width:250px"><b>Locale</b><br/>
+                                    <canvas id="localeChart" width="200" height="200"></canvas>
+                                </td>
+                                <td><div ng-repeat="locale in hbeat_locale_data_strings | orderBy :'-value'"><b>{{locale.key}}</b>: {{locale.value}}</div> </td>
+                            </tr>
+                        </table>
+                        
+                    </td>
+                    
+                    <td>
+                        <table style="width:100%">
+                            <tr>
+                                <td style="width:250px" ><b>OS version</b><br/> <canvas id="osversionChart" width="200" height="200"></canvas>
+                                </td>
+                                <td align="left"><div ng-repeat="os in hbeat_osversion_data_strings| orderBy :'-value'"><span class="square" style="background-color:#f2b829;"></span><b>{{os.key}}</b>: {{os.value}}</div> </td>
+                            </tr>
+                        </table>
+                        
+                    </td></tr>
+            </table>
         </div>
     </div>
     
