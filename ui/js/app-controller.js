@@ -7,17 +7,14 @@ appModule.controller('AppController', function($scope, $routeParams, $http, $int
 		value : 50,
 		color : "#E2EAE9"
 	}];
-    $scope.hbeat_locale_data_strings=[{key:"Not set",value:0}];
     $scope.hbeat_osversion_data=[{
 		value : 50,
 		color : "#E2EAE9"
 	}];
-    $scope.hbeat_osversion_data_strings=[{key:"Not set",value:0}];
     $scope.hbeat_appversion_data=[{
 		value : 50,
 		color : "#E2EAE9"
 	}];
-    $scope.hbeat_appversion_data_strings=[{key:"Not set",value:0}];
     
     
     $http.get('/admin/app/'+$routeParams.appId, {headers: {'Content-Type': 'application/json'}}).success(function (app){
@@ -92,8 +89,8 @@ appModule.controller('AppController', function($scope, $routeParams, $http, $int
                             for(var j in hbeats[i].locale)
                             {
                                 var color=$scope.getRandomColor();
-                                $scope.hbeat_locale_data.push({value:hbeats[i].locale[j],color : color});
-                                $scope.hbeat_locale_data_strings.push({key:j,value:hbeats[i].locale[j]});
+                                $scope.hbeat_locale_data.push({value:hbeats[i].locale[j],color : color,key:j,value:hbeats[i].locale[j]});
+                                
                             }
                         }
                         
@@ -105,8 +102,8 @@ appModule.controller('AppController', function($scope, $routeParams, $http, $int
                             for(var j in hbeats[i].osversion)
                             {
                                 var color=$scope.getRandomColor();
-                                $scope.hbeat_osversion_data.push({value:hbeats[i].osversion[j],color : color});
-                                $scope.hbeat_osversion_data_strings.push({key:j,value:hbeats[i].osversion[j]});
+                                $scope.hbeat_osversion_data.push({value:hbeats[i].osversion[j],color : color,key:j,value:hbeats[i].osversion[j]});
+                                
                             }
                         }
                         
@@ -118,8 +115,8 @@ appModule.controller('AppController', function($scope, $routeParams, $http, $int
                             for(var j in hbeats[i].appversion)
                             {
                                 var color=$scope.getRandomColor();
-                                $scope.hbeat_appversion_data.push({value:hbeats[i].appversion[j],color : color});
-                                $scope.hbeat_appversion_data_strings.push({key:j,value:hbeats[i].appversion[j]});
+                                $scope.hbeat_appversion_data.push({value:hbeats[i].appversion[j],color : color,key:j,value:hbeats[i].appversion[j]});
+                               
                             }
                         }
                     }
@@ -254,6 +251,29 @@ appModule.controller('AppController', function($scope, $routeParams, $http, $int
     $scope.$on("$destroy", function(){
        $interval.cancel(stopTime);
     });    
+    
+    $scope.get_android_version_name=function(code)
+    {
+        if(code==19)
+            return "Kitkat";
+        if(code >=16 && code<=19)
+            return "Jelly Bean";
+        if(code >=14 && code<=15)
+            return "Ice Cream Sandwich";
+         if(code >=11 && code<=13)
+            return "Honeycomb";
+         if(code >=9 && code<=10)
+            return "Gingerbread";
+         if(code==8)
+            return "Froyo";
+        if(code >=5 && code<=7)
+            return "Eclair";
+        if(code==4)
+            return "Donut";
+        if(code==1000)
+            return "Unofficial release";
+        else return "Old";
+    }
     
     $scope.refresh_page_data();
 }); 

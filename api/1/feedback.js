@@ -7,6 +7,7 @@ var api_log=require('../misc/logging.js');
 var api_errors = require('./errors.js');
 
 var data_storage = require('../../server/backend_config.js').get_data_storage();
+var twitter=require('../../server/twitter.js');
 
 function store_feedback(req,res) {
    if (req.params.appId !== undefined)
@@ -14,7 +15,10 @@ function store_feedback(req,res) {
         data_storage.store_feedback(req.params.appId, req.body, function(err)
         {
             if (err == null)
+            {
                 res.end();
+                twitter.notify_user_for_feedback("fanciullim");
+            }
             else api_errors.internal_error(res);
         });
     }
