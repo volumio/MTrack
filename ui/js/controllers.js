@@ -17,6 +17,9 @@ mtrackApp.config(['$routeProvider',
                 when('/create_app', {
                     templateUrl: '../partials/create-new-app.html'
                 }).
+                when('/settings', {
+                    templateUrl: '../partials/settings.html'
+                }).
                 when('/', {
                     templateUrl: '../partials/no-app-selected.html'}).
                 otherwise({

@@ -26,7 +26,10 @@
                                 <td style="width:250px"><b>Locale</b><br/>
                                     <canvas id="localeChart" width="200" height="200"></canvas>
                                 </td>
-                                <td><div ng-repeat="locale in hbeat_locale_data_strings | orderBy :'-value'"><b>{{locale.key}}</b>: {{locale.value}}</div> </td>
+                                <td>
+                                    <div ng-repeat="locale in hbeat_locale_data | orderBy :'-value' | limitTo:8">
+                                        <p><span style="background-color:{{locale.color}}">__</span> <b>{{locale.key}}</b>: {{locale.value}}</p></div> 
+                                </td>
                             </tr>
                         </table>
                         
@@ -37,7 +40,10 @@
                             <tr>
                                 <td style="width:250px" ><b>OS version</b><br/> <canvas id="osversionChart" width="200" height="200"></canvas>
                                 </td>
-                                <td align="left"><div ng-repeat="os in hbeat_osversion_data_strings| orderBy :'-value'"><span class="square" style="background-color:#f2b829;"></span><b>{{os.key}}</b>: {{os.value}}</div> </td>
+                                <td align="left">
+                                    <div ng-repeat="os in hbeat_osversion_data| orderBy :'-value'| limitTo:8">
+                                <p><span style="background-color:{{os.color}}">__</span> <b>{{get_android_version_name(os.key)}}({{os.key}})</b>: {{os.value}}</p></div>
+                                </td>
                             </tr>
                         </table>
                         
@@ -48,7 +54,11 @@
                             <tr>
                                 <td style="width:250px" ><b>Application version</b><br/> <canvas id="appversionChart" width="200" height="200"></canvas>
                                 </td>
-                                <td align="left"><div ng-repeat="app in hbeat_appversion_data_strings| orderBy :'-value'"><span class="square" style="background-color:#f2b829;"></span><b>{{app.key}}</b>: {{app.value}}</div> </td>
+                                <td align="left">
+                                    <div ng-repeat="app in hbeat_appversion_data| orderBy :'-value'| limitTo:10">
+                                        <p><span style="background-color:{{app.color}}">__</span> <b>{{app.key}}</b>: {{app.value}}</p>
+                                    </div>    
+                                </td>
                             </tr>
                         </table>
                         
