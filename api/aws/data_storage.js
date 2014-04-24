@@ -404,11 +404,25 @@ function delete_exception(app_id,id,callback)
     
 }
 
+function delete_app(app_id,callback)
+{
+    var params = {TableName: 'mtrack-apps',
+            Key:{
+                app_id:{S:app_id}
+            }};
+
+	dynamo.deleteItem(params, function(err, data) {
+                callback(err);
+            });
+    
+}
+
 module.exports.read_user = read_user;
 module.exports.store_user=store_user;
 
 module.exports.read_app=read_app;
 module.exports.store_app=store_app;
+module.exports.delete_app=delete_app;
 
 module.exports.read_hbeat_today = read_hbeat_today;
 module.exports.read_hbeat_month=read_hbeat_month;

@@ -35,6 +35,7 @@ var setup_express = function(app, passport)
     app.post('/admin/create_app', ensureAuthenticated,app_man.create_app);
     app.get('/admin/user', ensureAuthenticated,user_man.get_user);
     app.get('/admin/app/:appId', ensureAuthenticated,user_man.get_app);
+    app.delete('/admin/app/:appId', ensureAuthenticated,user_man.delete_app);
     
     app.use('/admin/private/*', ensureAuthenticated, express.static(__dirname + '/../ui/private'));
     /* app.use('/admin/private/*', passport.authenticate('local'), express.static(__dirname + '/../ui/private'));*/
