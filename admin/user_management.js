@@ -34,15 +34,7 @@ function get_app(req, res)
     });
 }
 
-function delete_app(req,res)
-{
-    storage_service.delete_app(req.params.appId,function(err){
-        if(err==null)
-            res.end();
-        else res.send(500);
-    });
-}
+
 
 module.exports.get_user = get_user;
 module.exports.get_app = get_app;
-module.exports.delete_app = delete_app;

@@ -36,6 +36,10 @@ mtrackApp.controller('HeaderCtrl', function($scope,$http) {
     $scope.select_app = function(app) {
         $scope.selected_app = app;
     };
+    
+    $scope.$on('refresh_app_list', function(event, args) {
+        $scope.refresh_app_list();
+    });
 
     $scope.refresh_app_list = function()
     {

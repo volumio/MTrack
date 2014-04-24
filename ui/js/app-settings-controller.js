@@ -15,7 +15,7 @@ appModule.controller('AppSettingsController', function($scope, $routeParams, $ht
         {
           $http.delete('/admin/app/' + $routeParams.appId , {headers: {'Content-Type': 'application/json'}})
                 .success(function(data) {
-                    console.log("Successo nella cancellazione. Hash="+$location.path());
+                    $scope.$emit('refresh_app_list', null);
                     $location.path("admin/private/index.html#/");
                 }).error(function(data, status, headers, config) {
            about("An error occurred deleting this app");

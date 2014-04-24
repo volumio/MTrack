@@ -28,11 +28,11 @@ function read_user(username, callback)
               user.fullname=data.Item.fullname.S;
               user.company=data.Item.company.S;
               
-                if(typeof data.Item.apps != 'undefined')
-                {
+              if(typeof data.Item.apps != 'undefined')
+              {
                 for( var i in data.Item.apps.SS)
                     user.apps.push(data.Item.apps.SS[i]);
-            }
+              }
             
               callback(user);
           }
