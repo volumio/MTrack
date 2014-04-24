@@ -336,6 +336,12 @@ function store_exception(app_id,body,callback)
                          os_type:{S:body.ostype},
                          os_version:{S:body.osversion}},
 			  TableName: 'mtrack-exceptions'};
+                      
+      if(typeof body.appversion!='undefined')
+      {
+            params.Item.appversion={S:body.appversion};
+      }                
+                      
 	dynamo.putItem(params, function(err, data) {
       if (err) callback("ERR_PUTTING_EXCEPTION");
 	  else    callback(null);
@@ -372,6 +378,9 @@ function list_exception(app_id,callback)
                     exception.os_type=items[i].os_type.S;
                     exception.os_version=items[i].os_version.S;
                      
+                    if(typeof items[i].appversion != 'undefined')
+                        exception.appversion=items[i].appversion.S;
+                    
                     result.exceptions.push(exception);
               }
               

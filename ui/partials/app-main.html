@@ -91,7 +91,7 @@
         </div>
         <div class="panel-body">
             <ul class="list-group" ng-repeat="exception in exceptions">
-                <li class="list-group-item"><b>{{exception.timestamp_str}} Device info: {{exception.os_type}} API Version: {{exception.os_version}}</b>
+                <li class="list-group-item"><b>{{exception.timestamp_str}}</b> <span class="badge">App Version: {{exception.appversion}}</span> <span class="badge">API Version: {{exception.os_version}}</span>
                     
                     <br/><br/>{{exception.exception}}
                     <br/>
