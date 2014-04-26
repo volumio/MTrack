@@ -417,6 +417,42 @@ function delete_app(app_id,callback)
     
 }
 
+function get_help_toc(app_id, callback)
+{
+    var params = {Key: {app_id: {S: app_id},
+                        page_id:{S: '0'}},
+                    TableName: 'mtrack-help',ConsistentRead: true };
+
+	dynamo.getItem(params, function(err, data) {
+	  if (err || data == null || typeof data.Item == "undefined") callback(null);
+	  else    
+          {
+              var values=[];
+              for(var i in data.Item.toc_content.SS)
+              {
+                  values.push(data.Item.toc_content.SS[i]);
+              }
+            
+              callback(values);
+          }
+	});
+}
+
+function get_help_page(app_id,page_id, callback)
+{
+    var params = {Key: {app_id: {S: app_id},
+                        page_id:{S: page_id}},
+                    TableName: 'mtrack-help',ConsistentRead: true };
+
+	dynamo.getItem(params, function(err, data) {
+	  if (err || data == null || typeof data.Item == "undefined") callback(null);
+	  else    
+          {
+              callback(data.Item.page_content.S);
+          }
+	});
+}
+
 module.exports.read_user = read_user;
 module.exports.store_user=store_user;
 
@@ -439,3 +475,6 @@ module.exports.delete_feedback=delete_feedback;
 module.exports.store_exception=store_exception;
 module.exports.list_exception=list_exception;
 module.exports.delete_exception=delete_exception;
+
+module.exports.get_help_toc=get_help_toc;
+module.exports.get_help_page=get_help_page;

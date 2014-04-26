@@ -9,6 +9,7 @@ var api_hbeat=require('../api/1/hbeat.js');
 var api_feedback=require('../api/1/feedback.js');
 var api_exceptions=require('../api/1/exceptions.js');
 var api_logging=require('../api/misc/logging.js');
+var api_help=require('../api/1/help.js');
 var registration=require('../admin/registration.js');
 var app_man=require('../admin/app_management.js');
 var user_man=require('../admin/user_management.js');
@@ -26,6 +27,9 @@ var setup_express = function(app, passport)
     app.post('/api/1/exception/:appId', api_exceptions.store_exception);
     app.get('/api/1/exception/:appId', api_exceptions.list_exceptions);
     app.delete('/api/1/exception/:appId/:id', api_exceptions.delete_exception);
+    
+    app.get('/api/1/help/:appId', api_help.get_toc);
+    app.get('/api/1/help/:appId/:pageId', api_help.get_page);
     
     
     app.post('/login', passport.authenticate('local', {successRedirect: '/admin/private/index.html', failureRedirect: '/admin/public/login.html'}));
