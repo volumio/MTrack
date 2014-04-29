@@ -1,14 +1,14 @@
 
-<div>
-    <div align="right">
+<div style="width:50%" >
+   <div align="center"> <div align="right">
   <a href="#/app_details/{{app_id}}">Go to application details</a>
 </div>
-    <div class="panel panel-default">
+    <div class="panel panel-default" align="left">
         <div class="panel-heading">
             <h3 class="panel-title">Application details</h3>
         </div>
         <div class="panel-body">
-            <table style="width:100%">
+            <table >
                 <col width="20%"/>
                 <col width="80%"/>
                 <tr>
@@ -21,8 +21,16 @@
                     <td>{{app_details.app_id}}</td>
                 </tr>
 
+                
+                <tr>
+                <td></td><td></td>
+                </tr>
+                <tr>
+                <td>Delete app</td><td><button type="button" class="btn btn-danger">Delete</button></td>
+                </tr>
             </table>
 
         </div>
-    </div>   
+    </div>
+       </div>
 </div>

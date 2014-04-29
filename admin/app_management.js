@@ -45,7 +45,7 @@ async.series([
     },
     function(callback)
     {
-        res.redirect('/admin/private/index.html#/app_details/'+app_id);
+        res.redirect('/admin/private/index.html#/app_settings/'+app_id);
          callback(null);
     }
 ],
