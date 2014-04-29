@@ -20,8 +20,6 @@ async.series([
     function(callback)
     {
         storage_service.read_user(username,function(data){
-            console.log(data);
-            
             if(data!=null)
             {
                 user=data;
@@ -59,4 +57,67 @@ function(err,data){
     
 }
 
+function delete_app(req,res)
+{
+    var user;
+    var username=req.user.username; 
+    async.series([
+    function(callback)
+    {
+      storage_service.read_user(username,function(data){
+            if(data!=null)
+            {
+                user=data;
+                callback(null);
+            }
+            else callback("CANNOT_READ_USER");
+        });  
+    },
+    function(callback)
+    {
+      for(var i in user.apps)
+      {
+          if(user.apps[i]==req.params.appId)
+              callback(null);
+      }
+      
+      callback("NOT FOUND");
+    },
+    function(callback)
+    {
+        var appsarray=[];
+        for(var i in user.apps)
+        {
+          if(user.apps[i]!=req.params.appId)
+              appsarray.push(user.apps[i]);
+        }
+        
+        user.apps=appsarray;
+        callback(null);
+    },
+    function(callback)
+    {
+        storage_service.store_user(user,callback);
+    },
+    function(callback)
+    {
+        storage_service.delete_app(req.params.appId,callback);
+    },
+    function(callback)
+    {
+        
+        res.end();
+         callback(null);
+    }
+],
+function(err,data){
+    
+});
+    
+    
+    
+    
+}
+
 module.exports.create_app=create_app;
+module.exports.delete_app = delete_app;

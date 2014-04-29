@@ -28,11 +28,11 @@ function read_user(username, callback)
               user.fullname=data.Item.fullname.S;
               user.company=data.Item.company.S;
               
-                if(typeof data.Item.apps != 'undefined')
-                {
+              if(typeof data.Item.apps != 'undefined')
+              {
                 for( var i in data.Item.apps.SS)
                     user.apps.push(data.Item.apps.SS[i]);
-            }
+              }
             
               callback(user);
           }
@@ -336,6 +336,12 @@ function store_exception(app_id,body,callback)
                          os_type:{S:body.ostype},
                          os_version:{S:body.osversion}},
 			  TableName: 'mtrack-exceptions'};
+                      
+      if(typeof body.appversion!='undefined')
+      {
+            params.Item.appversion={S:body.appversion};
+      }                
+                      
 	dynamo.putItem(params, function(err, data) {
       if (err) callback("ERR_PUTTING_EXCEPTION");
 	  else    callback(null);
@@ -372,6 +378,9 @@ function list_exception(app_id,callback)
                     exception.os_type=items[i].os_type.S;
                     exception.os_version=items[i].os_version.S;
                      
+                    if(typeof items[i].appversion != 'undefined')
+                        exception.appversion=items[i].appversion.S;
+                    
                     result.exceptions.push(exception);
               }
               
@@ -395,11 +404,61 @@ function delete_exception(app_id,id,callback)
     
 }
 
+function delete_app(app_id,callback)
+{
+    var params = {TableName: 'mtrack-apps',
+            Key:{
+                app_id:{S:app_id}
+            }};
+
+	dynamo.deleteItem(params, function(err, data) {
+                callback(err);
+            });
+    
+}
+
+function get_help_toc(app_id, callback)
+{
+    var params = {Key: {app_id: {S: app_id},
+                        page_id:{S: '0'}},
+                    TableName: 'mtrack-help',ConsistentRead: true };
+
+	dynamo.getItem(params, function(err, data) {
+	  if (err || data == null || typeof data.Item == "undefined") callback(null);
+	  else    
+          {
+              var values=[];
+              for(var i in data.Item.toc_content.SS)
+              {
+                  values.push(data.Item.toc_content.SS[i]);
+              }
+            
+              callback(values);
+          }
+	});
+}
+
+function get_help_page(app_id,page_id, callback)
+{
+    var params = {Key: {app_id: {S: app_id},
+                        page_id:{S: page_id}},
+                    TableName: 'mtrack-help',ConsistentRead: true };
+
+	dynamo.getItem(params, function(err, data) {
+	  if (err || data == null || typeof data.Item == "undefined") callback(null);
+	  else    
+          {
+              callback(data.Item.page_content.S);
+          }
+	});
+}
+
 module.exports.read_user = read_user;
 module.exports.store_user=store_user;
 
 module.exports.read_app=read_app;
 module.exports.store_app=store_app;
+module.exports.delete_app=delete_app;
 
 module.exports.read_hbeat_today = read_hbeat_today;
 module.exports.read_hbeat_month=read_hbeat_month;
@@ -416,3 +475,6 @@ module.exports.delete_feedback=delete_feedback;
 module.exports.store_exception=store_exception;
 module.exports.list_exception=list_exception;
 module.exports.delete_exception=delete_exception;
+
+module.exports.get_help_toc=get_help_toc;
+module.exports.get_help_page=get_help_page;
