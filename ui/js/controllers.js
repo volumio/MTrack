@@ -18,7 +18,8 @@ mtrackApp.config(['$routeProvider',
                     templateUrl: '../partials/create-new-app.html'
                 }).
                 when('/settings', {
-                    templateUrl: '../partials/settings.html'
+                    templateUrl: '../partials/settings.html',
+                    controller: 'UserSettingsController'
                 }).
                 when('/', {
                     templateUrl: '../partials/no-app-selected.html'}).
@@ -32,6 +33,7 @@ mtrackApp.controller('HeaderCtrl', function($scope,$http) {
     $scope.mtrack_version = "0.0.1";
     $scope.apps = []; //[{'name': 'AutoBluetooth', 'id': '1'}, {'name': 'myKilos', 'id': '2'}];
     $scope.selected_app = null;
+    $scope.user=null;
 
     $scope.select_app = function(app) {
         $scope.selected_app = app;
@@ -45,6 +47,7 @@ mtrackApp.controller('HeaderCtrl', function($scope,$http) {
     {
         $http.get('/admin/user', {headers: {'Content-Type': 'application/json'}})
                 .success(function(data) {
+                    $scope.user=data;
                     if (typeof data.apps != 'undefined')
                     {
                         for (var i in data.apps)

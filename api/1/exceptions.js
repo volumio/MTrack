@@ -18,7 +18,7 @@ function store_exception(req,res) {
             {
                 res.end();
                 
-                twitter.notify_user_for_exception("fanciullim");
+                //twitter.notify_user_for_exception("fanciullim");
             }
             else api_errors.internal_error(res);
         });
