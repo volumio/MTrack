@@ -3,50 +3,65 @@
  If you received it from a thrid party,
  please contact fanciulli@gmail.com
  */
-var url= require("url");
-var _s = require('underscore.string');
-var api_auth=require('./auth.js');
-var api_errors=require('./errors.js');
-var cloud_data=require('./cloud_data.js');
 var api_log=require('../misc/logging.js');
-var async=require('async');
+var api_errors = require('./errors.js');
 
-function feedback(req,res) {
-    var user_name=api_auth.passes_auth(req);
-    var pathname = url.parse(req.url).pathname;
-    
-    api_log.log("Reading data from bucket "+user_name);
-    if(user_name!=null)
+var data_storage = require('../../server/backend_config.js').get_data_storage();
+var twitter=require('../../server/twitter.js');
+
+function store_feedback(req,res) {
+   if (req.params.appId !== undefined)
     {
-        var body='';
-        req.on('data', function(chunk) {
-            body+=chunk;
-        })
-        req.on('end',function(){
-            var usr;
-            
-            cloud_data.read_user(user_name+'.json', function(user){
-                api_log.log("The following user has been read: "+user.name);
-                if(user!=null)
-                {
-                    var app_id=pathname.substring(pathname.lastIndexOf("/")+1);
-                    if(user.apps.indexOf(parseInt(app_id))>-1)
-                    {
-			
-                        res.end();
-                    }
-                    else api_error.no_app(res);
-                }
-                else api_errors.internal_error(res);
-            })
-            
-        })
+        data_storage.store_feedback(req.params.appId, req.body, function(err)
+        {
+            if (err == null)
+            {
+                res.end();
+                twitter.notify_user_for_feedback("fanciullim");
+            }
+            else api_errors.internal_error(res);
+        });
     }
-    else
-    {
-        api_errors.no_auth(res);
-    }
+    else res.send(400, 'AppID should be specified');
 }
 
-module.exports.feedback=feedback;
+function list_feedbacks(req,res)
+{
+    if (req.params.appId !== undefined)
+    {
+        data_storage.list_feedbacks(req.params.appId,  function(data)
+        {
+            var data_to_upload;
+
+            if (data == null)
+            {
+                data_to_upload = {};
+
+            }
+            else
+                data_to_upload = data;
+
+            res.json(data_to_upload);
+        });
+    }
+    else res.send(400, 'AppID should be specified');
+}
+
+function delete_feedback(req,res)
+{
+    if (req.params.appId !== undefined && req.params.id !== undefined)
+    {
+        data_storage.delete_feedback(req.params.appId, req.params.id, function(err)
+        {
+            if(err==null)
+                res.end();
+            else api_errors.internal_error(res);
+        });
+    }
+    else res.send(400, 'AppID should be specified');
+}
+
+module.exports.store_feedback=store_feedback;
+module.exports.list_feedbacks=list_feedbacks;
+module.exports.delete_feedback=delete_feedback;
 

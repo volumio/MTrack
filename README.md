@@ -2,6 +2,11 @@
 This is MTrack.
 
 This project is the Backend API for my mobile tracking library.
+##Install
+npm install aws-sdk
+npm install unserscore.string
+npm install date-utils 
+
 
 ##Apis
 ###Log

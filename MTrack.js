@@ -3,39 +3,31 @@
  If you received it from a thrid party,
  please contact fanciulli@gmail.com
  */
-var http = require('http');
-var url= require("url");
-var _s = require('underscore.string');
-var api_log=require('./api/1/log.js');
-var api_errors=require('./api/1/errors.js');
-var aws=require('aws-sdk');
+var express = require('express');
 
-var apis=http.createServer(function(req, res) {
-    aws.config.loadFromPath('./aws-credentials.json');
-    //Checking that request is for /api/<version>
-    var pathname = url.parse(req.url).pathname;    
-    if(_s.startsWith(pathname,"/api/1"))
-    {
-        if(req.method=='POST')
-        {
-            if(_s.startsWith(pathname,"/api/1/log"))
-                api_log.log(req,res);
-            else api_errors.no_one_here(res);
-        }
-        else 
-        {
-            api_errors.no_one_here(res);
-        }
-        
-        res.writeHead(200, {
-        'Content-Type': 'text/plain; charset=UTF-8'
-        });
-    }
-    else
-    {
-        api_errors.no_one_here(res);
-    }
-    
-    
-    
-}).listen(9080, "");
+var app = express();
+var http = require('http');
+var passport = require('passport');
+var passport_setup=require('./server/passport.js');
+var express_setup=require('./server/express.js');
+
+app.configure(function() {
+
+	// set up our express application
+	app.use(express.logger('dev')); // log every request to the console
+	app.use(express.cookieParser()); // read cookies (needed for auth)
+	app.use(express.urlencoded()); // get information from html forms
+        app.use(express.json());
+	//app.set('view engine', 'ejs'); // set up ejs for templating
+
+	// required for passport
+	app.use(express.session({ secret: '0GqtOtD4SSrJ1MUXj0ffkXLTt0a9ujYCZF6hMLtqfX7W0LA2SVQ3jPouAwgGnSa0' })); // session secret
+	app.use(passport.initialize());
+	app.use(passport.session()); // persistent login sessions
+
+});
+
+passport_setup.setup_passport(passport);
+express_setup.setup_express(app,passport);
+
+http.createServer(app).listen(9080);

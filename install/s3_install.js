@@ -5,7 +5,7 @@
  */
 var api_log=require('../api/misc/logging.js');
 var async=require('async');
-var install_buckets=require('./install_buckets.js');
+var install_buckets=require('../api/aws/s3_utils.js');
 
 //Creating users bucket
 async.series([
@@ -19,6 +19,10 @@ async.series([
     },
     function(callback)
     {
+        install_buckets.create_bucket('mtrack-users-waiting-list',callback);
+    },
+    function(callback)
+    {
         install_buckets.create_bucket('mtrack-applications',callback);
     },
     function(callback)
@@ -27,7 +31,7 @@ async.series([
     },
     function(callback)
     {
-        install_buckets.put_file_on_bucket('mtrack-users','fanciulli@gmail.com','../aws_data/usr_fanciulli@gmail.com.json',callback);;
+        install_buckets.create_bucket('mtrack-hbeat',callback);
     }
 ],
 function(err,data){
