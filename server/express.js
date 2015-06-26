@@ -14,8 +14,13 @@ var registration=require('../admin/registration.js');
 var app_man=require('../admin/app_management.js');
 var user_man=require('../admin/user_management.js');
 
+var body_parser=require('body-parser');
+
 var setup_express = function(app, passport)
 {
+    app.use(body_parser.json());
+    //app.use(body_parser.text());
+
     app.get('/api/1/hbeat/:appId/today', api_hbeat.get_today);
     app.get('/api/1/hbeat/:appId/month', api_hbeat.get_month);
     app.post('/api/1/hbeat/:appId', api_hbeat.store_today);
@@ -42,7 +47,9 @@ var setup_express = function(app, passport)
     app.delete('/admin/app/:appId', ensureAuthenticated,app_man.delete_app);
     
     app.use('/admin/private/*', ensureAuthenticated, express.static(__dirname + '/../ui/private'));
-    /* app.use('/admin/private/*', passport.authenticate('local'), express.static(__dirname + '/../ui/private'));*/
+
+
+
     app.use('/admin', express.static(__dirname + '/../ui'));
     app.use(function(err, req, res, next) {
         console.error(err.stack);
