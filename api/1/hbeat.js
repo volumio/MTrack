@@ -4,14 +4,13 @@
  please contact fanciulli@gmail.com
  */
 var url = require("url");
-var _s = require('underscore.string');
-var api_auth = require('./auth.js');
-var api_errors = require('./errors.js');
-var api_log = require('../misc/logging.js');
 var async = require('async');
-var datetime = require('../misc/datetime.js');
-var data_model=require('../model/data_model.js');
-var data_storage = require('../../server/backend_config.js').get_data_storage();
+
+var api_errors = require('./errors.js');
+var api_log = require('./../../misc/logging.js');
+
+var data_model=require('./model/data_model.js');
+var data_storage = require('./server/backend_config.js').get_data_storage();
 
 
 function store_today(req, res) {
@@ -28,7 +27,8 @@ function store_today(req, res) {
             else data_to_upload = beat;
 
             data_to_upload.beat_count = data_to_upload.beat_count + 1;
-            
+
+            console.log(req.body);
             if(typeof req.body != 'undefined')
             {
                 if(typeof req.body.locale !='undefined')
@@ -100,7 +100,7 @@ function store_today(req, res) {
                     data_to_upload.appversion=appversion_array;
                 }
             }
-            
+
             data_storage.store_hbeat_today( data_to_upload, function(err)
             {
                 if (err == null)
@@ -126,8 +126,7 @@ function get_today(req, res)
                 data_to_upload = {'beat_count': 0};
 
             }
-            else
-                data_to_upload = beat;
+            else data_to_upload = beat;
 
             res.json(data_to_upload);
         });
