@@ -54,7 +54,7 @@ function calculateCurrentVersion(callback)
             var minorCut=stdout.substring(dotIndex+1).trim();
             currentVersionMinor=parseInt(minorCut);
 
-            logger.info("Current version is "+currentVersionMajor+"."+currentVersionMinor);
+            //logger.info("Current version is "+currentVersionMajor+"."+currentVersionMinor);
 
             callback();
         }});
