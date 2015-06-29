@@ -3,8 +3,8 @@
  If you received it from a thrid party,
  please contact fanciulli@gmail.com
  */
-var config=require('properties-reader')('./config.properties');
-var api_log=require('./misc/logging.js');
+var config=require('properties-reader')('/MTrack/config.properties');
+var api_log=require('/MTrack/misc/logging.js');
 api_log.init(config);
 
 api_log.log("###########################");
@@ -16,7 +16,7 @@ api_log.log("");
 // CONFIGURATION
 var express = require('express');
 var app = express();
-var express_setup=require('./api/1/server/express.js');
+var express_setup=require('/MTrack/api/1/server/express.js');
 express_setup.setup_express(app);
 api_log.log("Configuration completed");
 

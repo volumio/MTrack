@@ -1,2 +1,3 @@
 node_modules
 .idea
+api/1/conf/aws-credentials.json
