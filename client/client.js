@@ -4,7 +4,7 @@
 
 var client=require('mtrack-node');
 var async=require('async');
-
+var exec=require('child_process').exec;
 
 var server_url='http://52.11.239.127:9080';
 var currentVersionMajor=0;
