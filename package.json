@@ -19,6 +19,7 @@
         "url": "http://github.com/YOUR_LOGIN/MTrack/issues"
     },
     "dependencies": {
+      "mtrack-node":"",
       "async": "1.2.1",
       "http":"",
       "express":"4.13.0",
