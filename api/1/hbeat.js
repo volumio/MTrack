@@ -28,9 +28,26 @@ function store_today(req, res) {
 
             data_to_upload.beat_count = data_to_upload.beat_count + 1;
 
-            console.log(req.body);
             if(typeof req.body != 'undefined')
             {
+                if(typeof req.body.uid !='undefined')
+                {
+                    if(data_to_upload.uids!=undefined)
+                    {
+                        if(data_to_upload.uids.indexOf(req.body.uid)>-1)
+                        {
+                            res.send(200, 'HeartBeat already sent for today');
+                            return;
+                        }
+                        else data_to_upload.uids.push(req.body.uid);
+                    }
+                    else
+                    {
+                        data_to_upload.uids=[];
+                        data_to_upload.uids.push(req.body.uid);
+                    }
+                }
+
                 if(typeof req.body.locale !='undefined')
                 {
                     var locale=req.body.locale;
@@ -106,7 +123,11 @@ function store_today(req, res) {
                 if (err == null)
                     res.end();
                 else
+                {
+                    console.log(err);
                     api_errors.internal_error(res);
+                }
+
             });
         });
     }
