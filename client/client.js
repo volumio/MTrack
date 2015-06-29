@@ -5,29 +5,18 @@
 var client=require('mtrack-node');
 var async=require('async');
 var exec=require('child_process').exec;
+var getmac=require('getmac');
+
 
 var server_url='http://52.11.239.127:9080';
 var currentVersionMajor=0;
 var currentVersionMinor=0;
+var uid;
 
 async.series([
         calculateCurrentVersion,
-        function(callback)
-        {
-            var options={
-                url:server_url,
-                app_id:1,
-                locale:"UNKNOWN",
-                appversion:currentVersionMajor+"."+currentVersionMinor
-            };
-
-            client.sendHBeat(options,function(resp)
-            {
-                console.log("Hbeat sent to host");
-            });
-
-            callback();
-        }
+        readMac,
+        sendHBeat
     ],
     function(err,data){
         if(err!=null)
@@ -37,6 +26,17 @@ async.series([
     });
 
 
+
+function readMac(callback)
+{
+    getmac.getMac(function(err,macAddress){
+        if (err)  callback(err)
+        else{
+            uid=macAddress;
+            callback();
+        }
+    })
+}
 
 function calculateCurrentVersion(callback)
 {
@@ -58,4 +58,21 @@ function calculateCurrentVersion(callback)
 
             callback();
         }});
+}
+
+function sendHBeat(callback)
+{
+    var options={
+        url:server_url,
+        app_id:1,
+        locale:"UNKNOWN",
+        appversion:currentVersionMajor+"."+currentVersionMinor
+    };
+
+    client.sendHBeat(options,function(resp)
+    {
+        console.log("Hbeat sent to host");
+    });
+
+    callback();
 }
