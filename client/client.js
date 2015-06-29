@@ -66,7 +66,8 @@ function sendHBeat(callback)
         url:server_url,
         app_id:1,
         locale:"UNKNOWN",
-        appversion:currentVersionMajor+"."+currentVersionMinor
+        appversion:currentVersionMajor+"."+currentVersionMinor,
+        uid:uid
     };
 
     client.sendHBeat(options,function(resp)
