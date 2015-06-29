@@ -10,6 +10,8 @@ var aws = require('aws-sdk');
 aws.config.loadFromPath('./aws-credentials.json');
 var dynamo = new aws.DynamoDB();
 
+var config=require('properties-reader')('./config.properties');
+api_log.init();
 api_log.log("*********************************************");
 api_log.log("*            Installation script            *");
 api_log.log("*********************************************");
