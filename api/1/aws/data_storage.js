@@ -25,6 +25,9 @@ function store_hbeat_today(hbeat,callback)
     
     if(typeof hbeat.appversion != 'undefined')
         params.Item.appversion={S:JSON.stringify(hbeat.appversion)};
+
+    if(typeof hbeat.uids != 'undefined')
+        params.Item.uids={S:JSON.stringify(hbeat.uids)};
     
 	dynamo.putItem(params, function(err, data) {
       if (err) callback("ERR_PUTTING_USER");
@@ -56,6 +59,9 @@ function read_hbeat_today(app_id,callback)
               
               if(typeof data.Item.appversion != 'undefined')
                   hbeat.appversion=JSON.parse(data.Item.appversion.S);
+
+              if(typeof data.Item.uids != 'undefined')
+                  hbeat.uids=JSON.parse(data.Item.uids.S);
               
               callback(hbeat);
           }
